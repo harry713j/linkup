@@ -1,5 +1,5 @@
 {
-  "id": "ba42ead5-a47b-4eb4-8af7-1e6ec10f092a",
+  "id": "acb57950-866d-4906-b0dc-adce220c8c8d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -30,7 +30,7 @@
         },
         "joined_at": {
           "name": "joined_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -100,14 +100,14 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -173,7 +173,7 @@
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -250,14 +250,14 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -314,13 +314,13 @@
         },
         "expires_at": {
           "name": "expires_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         },
         "created_at": {
           "name": "created_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -397,7 +397,7 @@
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
@@ -452,14 +452,14 @@
         },
         "created_at": {
           "name": "created_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
         },
         "updated_at": {
           "name": "updated_at",
-          "type": "time",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
           "default": "now()"

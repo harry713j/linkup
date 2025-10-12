@@ -6,7 +6,7 @@ CREATE TABLE "chat_participants" (
 	"chat_id" uuid NOT NULL,
 	"participant_id" uuid NOT NULL,
 	"role" "participant_role" DEFAULT 'participant',
-	"joined_at" time DEFAULT now(),
+	"joined_at" timestamp DEFAULT now(),
 	CONSTRAINT "pk_chat_participant" PRIMARY KEY("chat_id","participant_id")
 );
 --> statement-breakpoint
@@ -15,15 +15,15 @@ CREATE TABLE "chats" (
 	"name" text NOT NULL,
 	"admin_id" uuid NOT NULL,
 	"type" "chat_type" DEFAULT 'group',
-	"created_at" time DEFAULT now(),
-	"updated_at" time DEFAULT now()
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "message_status" (
 	"message_id" bigint NOT NULL,
 	"user_id" uuid NOT NULL,
 	"status" "message_state" DEFAULT 'sent',
-	"updated_at" time DEFAULT now()
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "messages" (
@@ -33,16 +33,16 @@ CREATE TABLE "messages" (
 	"content" text,
 	"attachment_url" text,
 	"message_type" "message_type" DEFAULT 'text',
-	"created_at" time DEFAULT now(),
-	"updated_at" time DEFAULT now()
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "refresh_tokens" (
 	"id" bigserial PRIMARY KEY NOT NULL,
 	"user_id" uuid NOT NULL,
 	"token" text NOT NULL,
-	"expires_at" time NOT NULL,
-	"created_at" time DEFAULT now()
+	"expires_at" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "user_details" (
@@ -51,7 +51,7 @@ CREATE TABLE "user_details" (
 	"bio" text,
 	"status" boolean DEFAULT false,
 	"profile_url" text,
-	"updated_at" time DEFAULT now()
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
@@ -59,8 +59,8 @@ CREATE TABLE "users" (
 	"username" text NOT NULL,
 	"email" text NOT NULL,
 	"password_hash" text NOT NULL,
-	"created_at" time DEFAULT now(),
-	"updated_at" time DEFAULT now()
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 ALTER TABLE "chat_participants" ADD CONSTRAINT "fk_participant" FOREIGN KEY ("participant_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

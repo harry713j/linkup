@@ -4,9 +4,9 @@ import {
   text,
   bigserial,
   uuid,
-  time,
   foreignKey,
   bigint,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import { UserTable } from "./users";
 import { ChatTable } from "./chats";
@@ -27,8 +27,8 @@ export const MessageTable = pgTable(
     content: text("content"),
     attachmentUrl: text("attachment_url"),
     messageType: MessageTypeEnum("message_type").default("text"),
-    createdAt: time("created_at").defaultNow(),
-    updatedAt: time("updated_at").defaultNow(),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
   },
   (table) => [
     foreignKey({
@@ -56,7 +56,7 @@ export const MessageStatusTable = pgTable(
     messageID: bigint({ mode: "bigint" }).notNull(),
     userID: uuid("user_id").notNull(),
     status: MessageStateEnum("status").default("sent"),
-    updatedAt: time("updated_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
   },
   (table) => [
     foreignKey({

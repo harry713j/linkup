@@ -1,24 +1,36 @@
-import express from "express";
+import express, { Application } from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { visitedEndpointsLogger } from "./utils/logger.js";
-import { ALLOWED_CLIENT } from "./constants.js";
+import { config } from "./config/config.js";
 import { catchAllRouter, healthRouter } from "./routes/index.js";
 
-const app = express();
+const app: Application = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ALLOWED_CLIENT,
+    origin: (origin, cb) => {
+      if (!origin || config.whitelists.includes(origin)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   },
 });
 
 app.use(
   cors({
-    origin: ALLOWED_CLIENT,
+    origin: (origin, cb) => {
+      if (!origin || config.whitelists.includes(origin)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );

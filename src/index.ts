@@ -1,7 +1,7 @@
 import { httpServer } from "./app.js";
-import { PORT } from "./constants.js";
-import { io } from "./app.js";
+import { config } from "./config/config.js";
 
+const PORT = config.port;
 httpServer.listen(PORT, () => {
   console.log("🚀 Server started on PORT ", PORT);
 });

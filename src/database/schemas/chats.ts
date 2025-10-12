@@ -1,7 +1,7 @@
 import {
   pgTable,
   text,
-  time,
+  timestamp,
   uuid,
   pgEnum,
   foreignKey,
@@ -19,8 +19,8 @@ export const ChatTable = pgTable(
     name: text("name").notNull(),
     adminID: uuid("admin_id").notNull(),
     type: ChatTypeEnum("type").default("group"),
-    createdAt: time("created_at").defaultNow(),
-    updatedAt: time("updated_at").defaultNow(),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
   },
   (table) => [
     foreignKey({
@@ -43,7 +43,7 @@ export const ChatParticipantTable = pgTable(
     chatID: uuid("chat_id").notNull(),
     participantID: uuid("participant_id").notNull(),
     role: ParticipantRoleEnum("role").default("participant"),
-    joinedAt: time("joined_at").defaultNow(),
+    joinedAt: timestamp("joined_at").defaultNow(),
   },
   (table) => [
     foreignKey({

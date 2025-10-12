@@ -5,7 +5,7 @@ import {
   index,
   pgTable,
   text,
-  time,
+  timestamp,
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
@@ -17,8 +17,8 @@ export const UserTable = pgTable(
     username: text("username").notNull(),
     email: text("email").notNull(),
     passwordHash: text("password_hash").notNull(),
-    createdAt: time("created_at").defaultNow(),
-    updatedAt: time("updated_at").defaultNow(),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
   },
   (table) => [
     uniqueIndex("email_idx").on(table.email),
@@ -29,12 +29,12 @@ export const UserTable = pgTable(
 export const UserDetailTable = pgTable(
   "user_details",
   {
-    userID: uuid("user_id").notNull().primaryKey(),
+    userID: uuid("user_id").primaryKey(),
     displayName: text("display_name"),
     bio: text("bio"),
     status: boolean("status").default(false),
     profileUrl: text("profile_url"),
-    updatedAt: time("updated_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
   },
   (table) => [
     foreignKey({
@@ -51,8 +51,8 @@ export const RefreshTokenTable = pgTable(
     id: bigserial({ mode: "bigint" }).primaryKey(),
     userID: uuid("user_id").notNull(),
     token: text("token").notNull(),
-    expiresAt: time("expires_at").notNull(),
-    createdAt: time("created_at").defaultNow(),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => [
     index("token_idx").on(table.token),
