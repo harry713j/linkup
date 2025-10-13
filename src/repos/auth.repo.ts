@@ -1,14 +1,13 @@
 import { eq } from "drizzle-orm";
 import { db } from "../database/index.js";
-import { UserTable } from "../database/schemas/users.js";
-import { UUID } from "crypto";
+import { RefreshTokenTable, UserTable } from "@/database/schemas/users.js";
 
 async function create(
   displayName: string,
   email: string,
   passwordHash: string
 ) {
-  return await db
+  const [user] = await db
     .insert(UserTable)
     .values({
       displayName: displayName,
@@ -22,23 +21,24 @@ async function create(
       createdAt: UserTable.createdAt,
       updatedAt: UserTable.updatedAt,
     });
+
+  return user;
 }
 
 async function findOneByEmail(email: string) {
   return await db.query.UserTable.findFirst({
-    columns: { passwordHash: false },
     where: eq(UserTable.email, email),
   });
 }
 
-async function findByID(id: UUID) {
+async function findByID(id: string) {
   return await db.query.UserTable.findFirst({
     columns: { passwordHash: false },
     where: eq(UserTable.id, id),
   });
 }
 
-async function updateEmail(id: UUID, newEmail: string) {
+async function updateEmail(id: string, newEmail: string) {
   return await db
     .update(UserTable)
     .set({ email: newEmail })
@@ -52,7 +52,7 @@ async function updateEmail(id: UUID, newEmail: string) {
     });
 }
 
-async function updatePassword(id: UUID, passwordHash: string) {
+async function updatePassword(id: string, passwordHash: string) {
   return await db
     .update(UserTable)
     .set({ passwordHash: passwordHash })
@@ -66,7 +66,7 @@ async function updatePassword(id: UUID, passwordHash: string) {
     });
 }
 
-async function deleteOne(id: UUID) {
+async function deleteOne(id: string) {
   return await db.delete(UserTable).where(eq(UserTable.id, id));
 }
 
@@ -77,4 +77,27 @@ export const userRepo = {
   updateEmail,
   updatePassword,
   deleteOne,
+};
+
+export const refreshTokenRepo = {
+  async create(userId: string, token: string, expiresAt: Date) {
+    const [refreshToken] = await db
+      .insert(RefreshTokenTable)
+      .values({ userID: userId, token: token, expiresAt: expiresAt })
+      .returning();
+
+    return refreshToken;
+  },
+
+  async deleteOne(userId: string) {
+    return await db
+      .delete(RefreshTokenTable)
+      .where(eq(RefreshTokenTable.userID, userId));
+  },
+
+  async findOne(token: string) {
+    return await db.query.RefreshTokenTable.findFirst({
+      where: eq(RefreshTokenTable.token, token),
+    });
+  },
 };
