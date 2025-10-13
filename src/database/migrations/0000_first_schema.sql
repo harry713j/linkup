@@ -47,7 +47,6 @@ CREATE TABLE "refresh_tokens" (
 --> statement-breakpoint
 CREATE TABLE "user_details" (
 	"user_id" uuid PRIMARY KEY NOT NULL,
-	"display_name" text,
 	"bio" text,
 	"status" boolean DEFAULT false,
 	"profile_url" text,
@@ -56,7 +55,7 @@ CREATE TABLE "user_details" (
 --> statement-breakpoint
 CREATE TABLE "users" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"username" text NOT NULL,
+	"display_name" text NOT NULL,
 	"email" text NOT NULL,
 	"password_hash" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
@@ -74,5 +73,4 @@ ALTER TABLE "refresh_tokens" ADD CONSTRAINT "fk_user" FOREIGN KEY ("user_id") RE
 ALTER TABLE "user_details" ADD CONSTRAINT "fk_user" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "chat_name_idx" ON "chats" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "token_idx" ON "refresh_tokens" USING btree ("token");--> statement-breakpoint
-CREATE UNIQUE INDEX "email_idx" ON "users" USING btree ("email");--> statement-breakpoint
-CREATE UNIQUE INDEX "username_idx" ON "users" USING btree ("username");
+CREATE UNIQUE INDEX "email_idx" ON "users" USING btree ("email");

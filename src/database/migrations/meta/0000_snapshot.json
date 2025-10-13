@@ -1,5 +1,5 @@
 {
-  "id": "acb57950-866d-4906-b0dc-adce220c8c8d",
+  "id": "e898082e-4a6e-4d14-9deb-09e23b6ec5d6",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -370,12 +370,6 @@
           "primaryKey": true,
           "notNull": true
         },
-        "display_name": {
-          "name": "display_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "bio": {
           "name": "bio",
           "type": "text",
@@ -432,8 +426,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "username": {
-          "name": "username",
+        "display_name": {
+          "name": "display_name",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -471,21 +465,6 @@
           "columns": [
             {
               "expression": "email",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "username_idx": {
-          "name": "username_idx",
-          "columns": [
-            {
-              "expression": "username",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

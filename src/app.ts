@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { visitedEndpointsLogger } from "./utils/logger.js";
 import { config } from "./config/config.js";
 import { catchAllRouter, healthRouter } from "./routes/index.js";
+import { errorHandler } from "@/middlewares/errorHandler.middleware.js";
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -41,5 +42,8 @@ app.use(visitedEndpointsLogger);
 
 app.use("/api/v1/healthz", healthRouter);
 app.use("/{*any}", catchAllRouter);
+
+// must be at last
+app.use(errorHandler);
 
 export { httpServer, io };
