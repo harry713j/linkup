@@ -12,7 +12,10 @@
     "lint:fix": "eslint . --fix",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:drop": "drizzle-kit drop"
+    "db:drop": "drizzle-kit drop",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
@@ -24,6 +27,8 @@
     "@types/node": "^24.0.10",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
     "drizzle-kit": "^0.31.5",
     "eslint": "^9.37.0",
     "globals": "^16.4.0",
@@ -31,7 +36,8 @@
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.46.0"
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
