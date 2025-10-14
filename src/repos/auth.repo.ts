@@ -39,7 +39,7 @@ async function findByID(id: string) {
 }
 
 async function updateEmail(id: string, newEmail: string) {
-  return await db
+  const [updatedUser] = await db
     .update(UserTable)
     .set({ email: newEmail })
     .where(eq(UserTable.id, id))
@@ -50,10 +50,12 @@ async function updateEmail(id: string, newEmail: string) {
       createdAt: UserTable.createdAt,
       updatedAt: UserTable.updatedAt,
     });
+
+  return updatedUser
 }
 
 async function updatePassword(id: string, passwordHash: string) {
-  return await db
+  const [updatedUser] = await db
     .update(UserTable)
     .set({ passwordHash: passwordHash })
     .where(eq(UserTable.id, id))
@@ -64,6 +66,20 @@ async function updatePassword(id: string, passwordHash: string) {
       createdAt: UserTable.createdAt,
       updatedAt: UserTable.updatedAt,
     });
+
+  return updatedUser
+}
+
+async function updateDisplayName(id: string, updateDisplayName: string) {
+  const [updatedUser] = await db.update(UserTable).set({ displayName: updateDisplayName }).where(eq(UserTable.id, id)).returning({
+    id: UserTable.id,
+    displayName: UserTable.displayName,
+    email: UserTable.email,
+    createdAt: UserTable.createdAt,
+    updatedAt: UserTable.updatedAt,
+  })
+
+  return updatedUser
 }
 
 async function deleteOne(id: string) {
@@ -76,6 +92,7 @@ export const userRepo = {
   findOneByEmail,
   updateEmail,
   updatePassword,
+  updateDisplayName,
   deleteOne,
 };
 
