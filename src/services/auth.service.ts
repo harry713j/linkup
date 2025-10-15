@@ -13,8 +13,8 @@ async function register(displayName: string, email: string, password: string) {
     throw new BadRequestError("User already exists with this email");
   }
 
-  const passwordHash = await passwordUtil.generatePasswordHash(password);
-  const user = await userRepo.create(displayName, email, passwordHash);
+  const passwordHash = await passwordUtil.generateHash(password);
+  const user = await userRepo.create(displayName.trim(), email, passwordHash);
   const token = jwtUtil.generate({ userId: user.id, email: user.email });
   const refreshTokenValue = randomUUID();
   const expiresAt = new Date(Date.now() + config.refreshTokenValidity);
@@ -36,10 +36,7 @@ async function login(email: string, password: string) {
     throw new UnauthorizedError("Invalid Credentials");
   }
 
-  const isValid = await passwordUtil.comparePassword(
-    password,
-    user.passwordHash
-  );
+  const isValid = await passwordUtil.compare(password, user.passwordHash);
   if (!isValid) {
     throw new UnauthorizedError("Invalid Credentials");
   }

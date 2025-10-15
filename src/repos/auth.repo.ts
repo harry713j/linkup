@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { db } from "../database/index.js";
+import { db, type Transaction } from "../database/index.js";
 import { RefreshTokenTable, UserTable } from "@/database/schemas/users.js";
 
 async function create(
@@ -33,7 +33,6 @@ async function findOneByEmail(email: string) {
 
 async function findByID(id: string) {
   return await db.query.UserTable.findFirst({
-    columns: { passwordHash: false },
     where: eq(UserTable.id, id),
   });
 }
@@ -51,7 +50,7 @@ async function updateEmail(id: string, newEmail: string) {
       updatedAt: UserTable.updatedAt,
     });
 
-  return updatedUser
+  return updatedUser;
 }
 
 async function updatePassword(id: string, passwordHash: string) {
@@ -67,19 +66,31 @@ async function updatePassword(id: string, passwordHash: string) {
       updatedAt: UserTable.updatedAt,
     });
 
-  return updatedUser
+  return updatedUser;
 }
 
-async function updateDisplayName(id: string, updateDisplayName: string) {
-  const [updatedUser] = await db.update(UserTable).set({ displayName: updateDisplayName }).where(eq(UserTable.id, id)).returning({
-    id: UserTable.id,
-    displayName: UserTable.displayName,
-    email: UserTable.email,
-    createdAt: UserTable.createdAt,
-    updatedAt: UserTable.updatedAt,
-  })
+async function updateDisplayName(
+  tx: Transaction,
+  id: string,
+  updateDisplayName?: string
+) {
+  if (!updateDisplayName) {
+    return;
+  }
 
-  return updatedUser
+  const [updatedUser] = await tx
+    .update(UserTable)
+    .set({ displayName: updateDisplayName })
+    .where(eq(UserTable.id, id))
+    .returning({
+      id: UserTable.id,
+      displayName: UserTable.displayName,
+      email: UserTable.email,
+      createdAt: UserTable.createdAt,
+      updatedAt: UserTable.updatedAt,
+    });
+
+  return updatedUser;
 }
 
 async function deleteOne(id: string) {

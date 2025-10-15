@@ -1,12 +1,7 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response } from "express";
 import { ApiError } from "@/errors/ApiError";
 
-export function errorHandler(
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export function errorHandler(err: any, req: Request, res: Response) {
   console.error(err);
 
   if (err instanceof ApiError) {

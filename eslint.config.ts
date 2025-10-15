@@ -10,7 +10,7 @@ export default defineConfig([
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
   },
-  globalIgnores(["node_modules", "dist", "build"]),
+  globalIgnores(["node_modules", "dist", "build", "tests", "coverage"]),
   tseslint.configs.recommended,
   {
     files: ["**/*.{ts,mts,cts}"],
