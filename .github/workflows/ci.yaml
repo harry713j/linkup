@@ -1,9 +1,9 @@
 name: CI
 
 on:
-  pull_request: 
+  pull_request:
     branches: [main]
-  
+
 jobs:
   format:
     name: Check code formatting
@@ -16,11 +16,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.0
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
-      
+
       - name: Check formatting with prettier
         run: npm run format:check
 
@@ -32,16 +32,16 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      
+
       - name: Set up NodeJS
         uses: actions/setup-node@v4
         with:
           node-version: 22.0
-          cache: 'npm'
-      
+          cache: "npm"
+
       - name: Install Dependencies
         run: npm ci
-      
+
       - name: Check linting with eslint
         run: npm run lint
 
@@ -50,17 +50,21 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: [format, linting]
+    env:
+      ALLOWED_ORIGIN: "http://localhost:3000,http://127.0.0.1:3000"
+      JWT_SECRET: supersecret-strings-jdoksjkjajkjakjk 
+      JWT_EXPIRY: 7d
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      
+
       - name: Set up NodeJS
         uses: actions/setup-node@v4
         with:
           node-version: 22.0
-          cache: 'npm'
-        
+          cache: "npm"
+
       - name: Install Dependencies
         run: npm ci
 
@@ -82,16 +86,16 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      
+
       - name: Set up NodeJS
         uses: actions/setup-node@v4
         with:
           node-version: 22.0
-          cache: 'npm'
-      
+          cache: "npm"
+
       - name: Install Dependencies
         run: npm ci
-      
+
       - name: Run npm audit
         run: npm audit --audit-level=moderate
         continue-on-error: true

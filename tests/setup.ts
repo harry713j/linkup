@@ -1,33 +1,33 @@
-import { afterAll, beforeAll, afterEach, beforeEach, vi } from 'vitest';
+import { afterAll, beforeAll, afterEach, beforeEach, vi } from "vitest";
 
 // Global test setup
 beforeAll(() => {
-    console.log('Starting test suite...');
-    // Set test environment variables
-    process.env.NODE_ENV = 'test';
-    process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test_db';
+  console.log("Starting test suite...");
+  // Set test environment variables
+  process.env.NODE_ENV = "test";
+  process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test_db";
 });
 
 afterAll(() => {
-    console.log('Test suite completed');
-    // Cleanup after all tests
+  console.log("Test suite completed");
+  // Cleanup after all tests
 });
 
 beforeEach(() => {
-    // Runs BEFORE EACH individual test
-    // Reset everything to a clean state
+  // Runs BEFORE EACH individual test
+  // Reset everything to a clean state
 
-    // Clear all mocks
-    vi.clearAllMocks();
+  // Clear all mocks
+  vi.clearAllMocks();
 
-    // Reset mock call counts
-    vi.resetModules();
+  // Reset mock call counts
+  vi.resetModules();
 
-    // Clear any in-memory data
-    // mockDatabase.clear();
+  // Clear any in-memory data
+  // mockDatabase.clear();
 
-    // Reset timers
-    vi.clearAllTimers();
+  // Reset timers
+  vi.clearAllTimers();
 });
 
 //   afterEach(() => {
@@ -48,6 +48,6 @@ beforeEach(() => {
 //   });
 
 // Global error handlers
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
 });

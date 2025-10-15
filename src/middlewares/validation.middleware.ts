@@ -7,7 +7,7 @@ export function validate<Type>(schema: ZodType<Type>) {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      throw new BadRequestError(result.error.message)
+      throw new BadRequestError(result.error.message);
     }
 
     req.body = result.data;

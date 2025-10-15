@@ -3,7 +3,7 @@ import {
   type RegisterInput,
   type LoginInput,
 } from "@/validations/auth.schema.js";
-import { authService } from "@/services/auth.service";
+import { authService } from "@/services/auth.service.js";
 import { config } from "@/config/config";
 
 async function register(req: Request, res: Response, next: NextFunction) {

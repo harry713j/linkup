@@ -5,7 +5,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { visitedEndpointsLogger } from "./utils/logger.js";
 import { config } from "./config/config.js";
-import { catchAllRouter, healthRouter, authRouter } from "./routes/index.js";
+import {
+  catchAllRouter,
+  healthRouter,
+  authRouter,
+  userRouter,
+} from "./routes/index.js";
 import { errorHandler } from "@/middlewares/errorHandler.middleware.js";
 
 const app: Application = express();
@@ -42,6 +47,7 @@ app.use(visitedEndpointsLogger);
 
 app.use("/healthz", healthRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 app.use("/{*any}", catchAllRouter);
 // must be at last
 app.use(errorHandler);

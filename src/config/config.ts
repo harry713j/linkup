@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 const allowedOrigins: string[] =
-  (process.env.ALLOWED_ORIGIN as string).split(",") || [];
+  (process.env.ALLOWED_ORIGIN as string)?.split(",") || [];
 
 const refreshTokenValidity = parseInt(
   process.env.REFRESH_TOKEN_EXPIRY as string,
