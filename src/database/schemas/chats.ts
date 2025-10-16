@@ -17,7 +17,8 @@ export const ChatTable = pgTable(
   {
     id: uuid("id").primaryKey(),
     name: text("name").notNull(),
-    adminID: uuid("admin_id").notNull(),
+    adminID: uuid("admin_id"),
+    groupIcon: text("group_icon"),
     type: ChatTypeEnum("type").default("group"),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),

@@ -1,5 +1,5 @@
 {
-  "id": "e898082e-4a6e-4d14-9deb-09e23b6ec5d6",
+  "id": "b4c3153e-4af7-4e9f-82ad-34b92d96b353",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -42,8 +42,12 @@
           "name": "fk_participant",
           "tableFrom": "chat_participants",
           "tableTo": "users",
-          "columnsFrom": ["participant_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "participant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -51,8 +55,12 @@
           "name": "fk_chat",
           "tableFrom": "chat_participants",
           "tableTo": "chats",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -60,7 +68,10 @@
       "compositePrimaryKeys": {
         "pk_chat_participant": {
           "name": "pk_chat_participant",
-          "columns": ["chat_id", "participant_id"]
+          "columns": [
+            "chat_id",
+            "participant_id"
+          ]
         }
       },
       "uniqueConstraints": {},
@@ -88,7 +99,13 @@
           "name": "admin_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "group_icon": {
+          "name": "group_icon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "type": {
           "name": "type",
@@ -135,8 +152,12 @@
           "name": "fk_admin",
           "tableFrom": "chats",
           "tableTo": "users",
-          "columnsFrom": ["admin_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "admin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -185,8 +206,12 @@
           "name": "fk_message",
           "tableFrom": "message_status",
           "tableTo": "messages",
-          "columnsFrom": ["message_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -194,8 +219,12 @@
           "name": "fk_user",
           "tableFrom": "message_status",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -269,8 +298,12 @@
           "name": "fk_group",
           "tableFrom": "messages",
           "tableTo": "chats",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -278,8 +311,12 @@
           "name": "fk_sender",
           "tableFrom": "messages",
           "tableTo": "users",
-          "columnsFrom": ["sender_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "sender_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -348,8 +385,12 @@
           "name": "fk_user",
           "tableFrom": "refresh_tokens",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -403,8 +444,12 @@
           "name": "fk_user",
           "tableFrom": "user_details",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -488,22 +533,37 @@
     "public.chat_type": {
       "name": "chat_type",
       "schema": "public",
-      "values": ["direct", "group"]
+      "values": [
+        "direct",
+        "group"
+      ]
     },
     "public.participant_role": {
       "name": "participant_role",
       "schema": "public",
-      "values": ["admin", "participant"]
+      "values": [
+        "admin",
+        "participant"
+      ]
     },
     "public.message_state": {
       "name": "message_state",
       "schema": "public",
-      "values": ["sent", "delivered", "seen"]
+      "values": [
+        "sent",
+        "delivered",
+        "seen"
+      ]
     },
     "public.message_type": {
       "name": "message_type",
       "schema": "public",
-      "values": ["text", "image", "video", "file"]
+      "values": [
+        "text",
+        "image",
+        "video",
+        "file"
+      ]
     }
   },
   "schemas": {},

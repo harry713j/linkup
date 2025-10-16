@@ -13,7 +13,8 @@ CREATE TABLE "chat_participants" (
 CREATE TABLE "chats" (
 	"id" uuid PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
-	"admin_id" uuid NOT NULL,
+	"admin_id" uuid,
+	"group_icon" text,
 	"type" "chat_type" DEFAULT 'group',
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now()
