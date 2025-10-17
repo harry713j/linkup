@@ -52,7 +52,7 @@ jobs:
     needs: [format, linting]
     env:
       ALLOWED_ORIGIN: "http://localhost:3000,http://127.0.0.1:3000"
-      JWT_SECRET: supersecret-strings-jdoksjkjajkjakjk 
+      JWT_SECRET: supersecret-strings-jdoksjkjajkjakjk
       JWT_EXPIRY: 7d
 
     steps:

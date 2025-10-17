@@ -1,5 +1,5 @@
 {
-  "id": "e898082e-4a6e-4d14-9deb-09e23b6ec5d6",
+  "id": "b4c3153e-4af7-4e9f-82ad-34b92d96b353",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -88,7 +88,13 @@
           "name": "admin_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "group_icon": {
+          "name": "group_icon",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "type": {
           "name": "type",
