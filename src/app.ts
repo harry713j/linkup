@@ -49,7 +49,7 @@ app.use(visitedEndpointsLogger);
 app.use("/healthz", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/chats", chatRouter)
+app.use("/api/v1/chats", chatRouter);
 app.use("/{*any}", catchAllRouter);
 // must be at last
 app.use(errorHandler);
