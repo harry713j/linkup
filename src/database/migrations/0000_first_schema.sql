@@ -24,7 +24,8 @@ CREATE TABLE "message_status" (
 	"message_id" bigint NOT NULL,
 	"user_id" uuid NOT NULL,
 	"status" "message_state" DEFAULT 'sent',
-	"updated_at" timestamp DEFAULT now()
+	"updated_at" timestamp DEFAULT now(),
+	CONSTRAINT "pk_message_status_user" PRIMARY KEY("message_id","user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "messages" (

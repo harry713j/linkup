@@ -14,11 +14,13 @@ router
   .route("")
   .post(verifyToken, validate(chatSchema), chatController.createChat)
   .get(verifyToken, chatController.fetchAllChats);
+
 router
   .route("/:chatId")
   .patch(verifyToken, validate(updateChatSchema), chatController.updateChat)
   .get(verifyToken, chatController.fetchChat)
   .delete(verifyToken, chatController.removeChat);
+
 router
   .route("/:chatId/participants")
   .post(
@@ -27,10 +29,13 @@ router
     chatController.addParticipants
   )
   .get(verifyToken, chatController.fetchAllParticipants);
+
 router.delete(
   "/:chatId/participants/:participantsId",
   verifyToken,
   chatController.removeParticipants
 );
+
+router.get("/:chatId/messages", verifyToken, chatController.fetchAllMessage);
 
 export default router;

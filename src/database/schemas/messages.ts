@@ -7,6 +7,7 @@ import {
   foreignKey,
   bigint,
   timestamp,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 import { UserTable } from "./users";
 import { ChatTable } from "./chats";
@@ -21,7 +22,7 @@ export const MessageTypeEnum = pgEnum("message_type", [
 export const MessageTable = pgTable(
   "messages",
   {
-    id: bigserial({ mode: "bigint" }).primaryKey(),
+    id: bigserial({ mode: "number" }).primaryKey(),
     chatID: uuid("chat_id").notNull(),
     senderID: uuid("sender_id").notNull(),
     content: text("content"),
@@ -53,12 +54,16 @@ export const MessageStateEnum = pgEnum("message_state", [
 export const MessageStatusTable = pgTable(
   "message_status",
   {
-    messageID: bigint({ mode: "bigint" }).notNull(),
+    messageID: bigint({ mode: "number" }).notNull(),
     userID: uuid("user_id").notNull(),
     status: MessageStateEnum("status").default("sent"),
     updatedAt: timestamp("updated_at").defaultNow(),
   },
   (table) => [
+    primaryKey({
+      name: "pk_message_status_user",
+      columns: [table.messageID, table.userID],
+    }),
     foreignKey({
       name: "fk_message",
       columns: [table.messageID],

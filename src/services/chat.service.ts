@@ -1,5 +1,6 @@
 import { chatParticipantRepo, chatRepo } from "@/repos/chat.repo.js";
 import { userRepo } from "@/repos/auth.repo.js";
+import { messageRepo } from "@/repos/message.repo.js";
 import {
   CreateChatInput,
   UpdateChatInput,
@@ -126,6 +127,30 @@ async function removeChat(userId: string, chatId: string) {
   return await chatRepo.deleteChat(chat.id);
 }
 
+async function fetchAllMessage(
+  userId: string,
+  chatId: string,
+  page: number,
+  limit: number
+) {
+  const user = await userRepo.findByID(userId);
+  if (!user) {
+    throw new UnauthorizedError();
+  }
+
+  const chat = await chatRepo.findOne(chatId);
+  if (!chat) {
+    throw new NotFoundError("Chat not exists");
+  }
+
+  const paginatedMessageResponse = await messageRepo.fetchAll(
+    chat.id,
+    page,
+    limit
+  );
+  return paginatedMessageResponse;
+}
+
 async function addParticipants(
   userId: string,
   chatId: string,
@@ -215,4 +240,5 @@ export const chatService = {
   addParticipants,
   removeParticipants,
   fetchAllParticipants,
+  fetchAllMessage,
 };

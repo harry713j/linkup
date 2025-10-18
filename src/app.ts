@@ -11,6 +11,7 @@ import {
   authRouter,
   userRouter,
   chatRouter,
+  messageRouter,
 } from "./routes/index.js";
 import { errorHandler } from "@/middlewares/errorHandler.middleware.js";
 
@@ -50,6 +51,7 @@ app.use("/healthz", healthRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/chats", chatRouter);
+app.use("/api/v1/messages", messageRouter);
 app.use("/{*any}", catchAllRouter);
 // must be at last
 app.use(errorHandler);

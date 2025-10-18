@@ -71,6 +71,31 @@ async function fetchChat(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function fetchAllMessage(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.user?.id;
+    const { chatId } = req.params;
+    const { page, limit } = req.query;
+    const messages = await chatService.fetchAllMessage(
+      userId as string,
+      chatId,
+      Number(page),
+      Number(limit)
+    );
+
+    res.status(200).json({
+      message: "Messages fetched successfully",
+      data: messages,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function removeChat(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = req.user?.id;
@@ -162,4 +187,5 @@ export const chatController = {
   addParticipants,
   removeParticipants,
   fetchAllParticipants,
+  fetchAllMessage,
 };

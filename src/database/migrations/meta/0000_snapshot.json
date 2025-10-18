@@ -1,5 +1,5 @@
 {
-  "id": "b4c3153e-4af7-4e9f-82ad-34b92d96b353",
+  "id": "2c25d61e-6002-4715-94a8-c919d4aacb9a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -206,7 +206,12 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "pk_message_status_user": {
+          "name": "pk_message_status_user",
+          "columns": ["message_id", "user_id"]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
