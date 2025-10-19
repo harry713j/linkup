@@ -13,6 +13,10 @@ export async function verifyToken(
       throw new UnauthorizedError("Missing Authorization header");
     }
 
+    if (!authHeader.startsWith("Bearer")) {
+      throw new UnauthorizedError("Invalid token type");
+    }
+
     const token = authHeader.split(" ")[1];
     if (!token) {
       throw new UnauthorizedError("Invalid authorization format");

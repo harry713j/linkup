@@ -103,10 +103,25 @@ async function removeProfileUrl(
   }
 }
 
+async function fetchUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.user?.id;
+    const user = await userService.fetchUser(userId as string);
+
+    res.status(200).json({
+      message: "User details fetched successfully",
+      user: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const userController = {
   update,
   updateEmail,
   updatePassword,
   updateProfileUrl,
   removeProfileUrl,
+  fetchUser,
 };

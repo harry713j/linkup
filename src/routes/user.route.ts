@@ -17,18 +17,19 @@ router.patch(
   validate(updateEmailSchema),
   userController.updateEmail
 );
+
 router.patch(
   "/me/password",
   verifyToken,
   validate(updatePasswordSchema),
   userController.updatePassword
 );
-router.patch(
-  "/me",
-  verifyToken,
-  validate(updateUserDetailSchema),
-  userController.update
-);
+
+router
+  .route("/me")
+  .patch(verifyToken, validate(updateUserDetailSchema), userController.update)
+  .get(verifyToken, userController.fetchUser);
+
 router
   .route("/me/profile-picture")
   .post(

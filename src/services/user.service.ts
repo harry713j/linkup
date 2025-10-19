@@ -82,10 +82,22 @@ async function removeProfileUrl(userId: string) {
   return user;
 }
 
+async function fetchUser(userId: string) {
+  const existingUser = await userRepo.findByID(userId);
+  if (!existingUser) {
+    throw new UnauthorizedError();
+  }
+
+  const user = await userDetailRepo.findByID(existingUser.id);
+
+  return user;
+}
+
 export const userService = {
   updateEmail,
   updatePassword,
   updateProfileUrl,
   removeProfileUrl,
   update,
+  fetchUser,
 };
