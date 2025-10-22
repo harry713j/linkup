@@ -4,7 +4,7 @@ import "./global.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { Home } from "@/pages/index";
+import { Home, Signup, Login } from "@/pages/index";
 
 const router = createBrowserRouter([
   {
@@ -13,11 +13,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <h1>Sign up</h1>,
+    element: <Signup />,
   },
   {
     path: "/login",
-    element: <h1>Log in</h1>,
+    element: <Login />,
   },
 ]);
 
