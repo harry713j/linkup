@@ -1,22 +1,22 @@
 import { eq } from "drizzle-orm";
-import { db, type Transaction } from "../database/index.js";
+import { db } from "../database/index.js";
 import { RefreshTokenTable, UserTable } from "@/database/schemas/users.js";
 
 async function create(
-  displayName: string,
+  username: string,
   email: string,
   passwordHash: string
 ) {
   const [user] = await db
     .insert(UserTable)
     .values({
-      displayName: displayName,
+      username: username,
       email: email,
       passwordHash: passwordHash,
     })
     .returning({
       id: UserTable.id,
-      displayName: UserTable.displayName,
+      username: UserTable.username,
       email: UserTable.email,
       createdAt: UserTable.createdAt,
       updatedAt: UserTable.updatedAt,
@@ -29,6 +29,12 @@ async function findOneByEmail(email: string) {
   return await db.query.UserTable.findFirst({
     where: eq(UserTable.email, email),
   });
+}
+
+async function findByUsername(username: string) {
+  return await db.query.UserTable.findFirst({
+    where: eq(UserTable.username, username)
+  })
 }
 
 async function findByID(id: string) {
@@ -44,7 +50,7 @@ async function updateEmail(id: string, newEmail: string) {
     .where(eq(UserTable.id, id))
     .returning({
       id: UserTable.id,
-      displayName: UserTable.displayName,
+      username: UserTable.username,
       email: UserTable.email,
       createdAt: UserTable.createdAt,
       updatedAt: UserTable.updatedAt,
@@ -60,31 +66,7 @@ async function updatePassword(id: string, passwordHash: string) {
     .where(eq(UserTable.id, id))
     .returning({
       id: UserTable.id,
-      displayName: UserTable.displayName,
-      email: UserTable.email,
-      createdAt: UserTable.createdAt,
-      updatedAt: UserTable.updatedAt,
-    });
-
-  return updatedUser;
-}
-
-async function updateDisplayName(
-  tx: Transaction,
-  id: string,
-  updateDisplayName?: string
-) {
-  if (!updateDisplayName) {
-    return;
-  }
-
-  const [updatedUser] = await tx
-    .update(UserTable)
-    .set({ displayName: updateDisplayName })
-    .where(eq(UserTable.id, id))
-    .returning({
-      id: UserTable.id,
-      displayName: UserTable.displayName,
+      username: UserTable.username,
       email: UserTable.email,
       createdAt: UserTable.createdAt,
       updatedAt: UserTable.updatedAt,
@@ -101,9 +83,9 @@ export const userRepo = {
   create,
   findByID,
   findOneByEmail,
+  findByUsername,
   updateEmail,
   updatePassword,
-  updateDisplayName,
   deleteOne,
 };
 

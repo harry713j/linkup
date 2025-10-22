@@ -1,11 +1,12 @@
 import * as z from "zod";
 
 export const registerSchema = z.object({
-  displayName: z
+  username: z
     .string()
     .nonempty()
     .min(4, "Display name should have at least 4 characters")
-    .max(30, "Display name shouldn't exceed 30 characters"),
+    .max(30, "Display name shouldn't exceed 30 characters")
+    .regex(/^[a-z0-9_]+$/, "Username can only contain lowercase letters, numbers, and underscores"),
   email: z.email({ error: "Invalid email" }),
   password: z
     .string()

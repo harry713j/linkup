@@ -8,9 +8,9 @@ import { config } from "@/config/config";
 
 async function register(req: Request, res: Response, next: NextFunction) {
   try {
-    const { displayName, email, password }: RegisterInput = req.body;
+    const { username, email, password }: RegisterInput = req.body;
     const { user, token, refreshToken } = await authService.register(
-      displayName,
+      username,
       email,
       password
     );
@@ -29,7 +29,7 @@ async function register(req: Request, res: Response, next: NextFunction) {
       .cookie("refresh_token", refreshToken, cookieOption)
       .json({
         message: "User registration successful",
-        user: { id: user.id, displayName: user.displayName, email: user.email },
+        user: { id: user.id, displayName: user.username, email: user.email },
         accessToken: token,
       });
   } catch (error) {
@@ -60,7 +60,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
       .cookie("refresh_token", refreshToken, cookieOption)
       .json({
         message: "User login successful",
-        user: { id: user.id, displayName: user.displayName, email: user.email },
+        user: { id: user.id, displayName: user.username, email: user.email },
         accessToken: token,
       });
   } catch (error) {

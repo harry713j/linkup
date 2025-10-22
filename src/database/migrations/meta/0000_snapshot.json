@@ -1,5 +1,5 @@
 {
-  "id": "2c25d61e-6002-4715-94a8-c919d4aacb9a",
+  "id": "a08b3072-dc97-4580-a26c-f9131b0d8791",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -42,8 +42,12 @@
           "name": "fk_participant",
           "tableFrom": "chat_participants",
           "tableTo": "users",
-          "columnsFrom": ["participant_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "participant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -51,8 +55,12 @@
           "name": "fk_chat",
           "tableFrom": "chat_participants",
           "tableTo": "chats",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -60,7 +68,10 @@
       "compositePrimaryKeys": {
         "pk_chat_participant": {
           "name": "pk_chat_participant",
-          "columns": ["chat_id", "participant_id"]
+          "columns": [
+            "chat_id",
+            "participant_id"
+          ]
         }
       },
       "uniqueConstraints": {},
@@ -141,8 +152,12 @@
           "name": "fk_admin",
           "tableFrom": "chats",
           "tableTo": "users",
-          "columnsFrom": ["admin_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "admin_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -191,8 +206,12 @@
           "name": "fk_message",
           "tableFrom": "message_status",
           "tableTo": "messages",
-          "columnsFrom": ["message_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -200,8 +219,12 @@
           "name": "fk_user",
           "tableFrom": "message_status",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -209,7 +232,10 @@
       "compositePrimaryKeys": {
         "pk_message_status_user": {
           "name": "pk_message_status_user",
-          "columns": ["message_id", "user_id"]
+          "columns": [
+            "message_id",
+            "user_id"
+          ]
         }
       },
       "uniqueConstraints": {},
@@ -280,8 +306,12 @@
           "name": "fk_group",
           "tableFrom": "messages",
           "tableTo": "chats",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -289,8 +319,12 @@
           "name": "fk_sender",
           "tableFrom": "messages",
           "tableTo": "users",
-          "columnsFrom": ["sender_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "sender_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -359,8 +393,12 @@
           "name": "fk_user",
           "tableFrom": "refresh_tokens",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -380,6 +418,12 @@
           "type": "uuid",
           "primaryKey": true,
           "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "bio": {
           "name": "bio",
@@ -414,8 +458,12 @@
           "name": "fk_user",
           "tableFrom": "user_details",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -437,8 +485,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "display_name": {
-          "name": "display_name",
+        "username": {
+          "name": "username",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -471,6 +519,21 @@
         }
       },
       "indexes": {
+        "username_idx": {
+          "name": "username_idx",
+          "columns": [
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "email_idx": {
           "name": "email_idx",
           "columns": [
@@ -499,22 +562,37 @@
     "public.chat_type": {
       "name": "chat_type",
       "schema": "public",
-      "values": ["direct", "group"]
+      "values": [
+        "direct",
+        "group"
+      ]
     },
     "public.participant_role": {
       "name": "participant_role",
       "schema": "public",
-      "values": ["admin", "participant"]
+      "values": [
+        "admin",
+        "participant"
+      ]
     },
     "public.message_state": {
       "name": "message_state",
       "schema": "public",
-      "values": ["sent", "delivered", "seen"]
+      "values": [
+        "sent",
+        "delivered",
+        "seen"
+      ]
     },
     "public.message_type": {
       "name": "message_type",
       "schema": "public",
-      "values": ["text", "image", "video", "file"]
+      "values": [
+        "text",
+        "image",
+        "video",
+        "file"
+      ]
     }
   },
   "schemas": {},

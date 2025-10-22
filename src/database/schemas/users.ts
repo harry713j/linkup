@@ -14,19 +14,20 @@ export const UserTable = pgTable(
   "users",
   {
     id: uuid("id").primaryKey().defaultRandom(),
-    displayName: text("display_name").notNull(),
+    username: text("username").notNull(),
     email: text("email").notNull(),
     passwordHash: text("password_hash").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
   },
-  (table) => [uniqueIndex("email_idx").on(table.email)]
+  (table) => [uniqueIndex("username_idx").on(table.username), uniqueIndex("email_idx").on(table.email)]
 );
 
 export const UserDetailTable = pgTable(
   "user_details",
   {
     userID: uuid("user_id").primaryKey(),
+    displayName: text("display_name"),
     bio: text("bio"),
     status: boolean("status").default(false),
     profileUrl: text("profile_url"),

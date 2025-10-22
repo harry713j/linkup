@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 import { userDetailRepo } from "@/repos/userDetail.repo";
 import { config } from "@/config/config";
 
-async function register(displayName: string, email: string, password: string) {
+async function register(username: string, email: string, password: string) {
   const existingUser = await userRepo.findOneByEmail(email);
 
   if (existingUser) {
@@ -14,7 +14,7 @@ async function register(displayName: string, email: string, password: string) {
   }
 
   const passwordHash = await passwordUtil.generateHash(password);
-  const user = await userRepo.create(displayName.trim(), email, passwordHash);
+  const user = await userRepo.create(username.trim(), email, passwordHash);
   const token = jwtUtil.generate({ userId: user.id, email: user.email });
   const refreshTokenValue = randomUUID();
   const expiresAt = new Date(Date.now() + config.refreshTokenValidity);
@@ -23,7 +23,7 @@ async function register(displayName: string, email: string, password: string) {
     refreshTokenValue,
     expiresAt
   );
-  await userDetailRepo.create(user.id);
+  await userDetailRepo.create(user.id, username.trim());
 
   const refreshToken = refreshTokenRow.token;
 
@@ -49,7 +49,6 @@ async function login(email: string, password: string) {
     refreshTokenValue,
     expiresAt
   );
-  await userDetailRepo.create(user.id);
   const refreshToken = refreshTokenRow.token;
 
   return { user, token, refreshToken };

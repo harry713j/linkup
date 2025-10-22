@@ -11,15 +11,7 @@ async function update(userId: string, data: UpdateUserDetailInput) {
     throw new UnauthorizedError();
   }
 
-  return db.transaction(async (tx) => {
-    await userRepo.updateDisplayName(tx, userId, data.displayName);
-    await userDetailRepo.update(tx, userId, {
-      bio: data.bio,
-      status: data.status,
-    });
-
-    return await userDetailRepo.findByID(existingUser.id);
-  });
+  return await userDetailRepo.update(userId, data)
 }
 
 async function updateEmail(userId: string, email: string) {

@@ -4,7 +4,7 @@ import "./global.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { Home, Signup, Login } from "@/pages/index";
+import { Home, Signup, Login, Chat } from "@/pages/index";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/chat",
+    element: <Chat />,
   },
 ]);
 

@@ -1,5 +1,4 @@
 import type { Response, Request } from "express";
-import { serverLogger } from "../utils/logger.js";
 
 export async function handleHealth(req: Request, res: Response) {
   try {
@@ -7,7 +6,7 @@ export async function handleHealth(req: Request, res: Response) {
       message: "Server is running well!",
     });
   } catch (error) {
-    serverLogger(error as Error);
+    console.error("Server Error: ", error)
     res.status(500).json({
       message: "Something went wrong!",
     });
