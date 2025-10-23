@@ -9,8 +9,8 @@ import {
   timestamp,
   primaryKey,
 } from "drizzle-orm/pg-core";
-import { UserTable } from "./users";
-import { ChatTable } from "./chats";
+import { UserTable } from "./users.js";
+import { ChatTable } from "./chats.js";
 
 export const MessageTypeEnum = pgEnum("message_type", [
   "text",

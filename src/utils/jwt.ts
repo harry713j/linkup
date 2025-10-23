@@ -1,4 +1,4 @@
-import { config } from "@/config/config";
+import { config } from "@/config/config.js";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { randomUUID } from "crypto";
 

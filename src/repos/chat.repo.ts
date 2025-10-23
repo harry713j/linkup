@@ -1,5 +1,5 @@
 import { db, Transaction } from "@/database/index.js";
-import { ChatParticipantTable, ChatTable } from "@/database/schemas/chats";
+import { ChatParticipantTable, ChatTable } from "@/database/schemas/chats.js";
 import type { ChatType } from "@/validations/chat.schema.js";
 import { eq, sql } from "drizzle-orm";
 import type { Participant } from "@/types/chat";

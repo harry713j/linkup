@@ -1,12 +1,21 @@
 import type { LoginUser, RegisterUser } from "@/schema";
 
+export interface UserDetail {
+  displayName: string | null
+  bio: string | null
+  userID: string
+  status: boolean
+  profileUrl: string | null
+  updatedAt: Date
+}
+
 export interface User {
-  displayName: string;
+  username: string;
   email: string;
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  userDetail: any;
+  userDetail: UserDetail;
 }
 
 export interface AuthContextType {

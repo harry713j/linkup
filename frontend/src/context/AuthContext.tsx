@@ -15,6 +15,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  console.log("User: ", user);
+
   const signup = async (data: RegisterUser) => {
     const response = await axiosInstance.post("/auth/register", data);
     setAccessToken(response.data.accessToken);

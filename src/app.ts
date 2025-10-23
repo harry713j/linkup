@@ -14,6 +14,7 @@ import {
   messageRouter,
 } from "./routes/index.js";
 import { errorHandler } from "@/middlewares/errorHandler.middleware.js";
+import initializeSocket from "./socket/index.js";
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -56,4 +57,6 @@ app.use("/{*any}", catchAllRouter);
 // must be at last
 app.use(errorHandler);
 
-export { httpServer, io };
+initializeSocket(io)
+
+export { httpServer };

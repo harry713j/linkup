@@ -1,12 +1,8 @@
-import * as React from "react";
+import * as React from "react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-export interface InputProps extends React.ComponentProps<"input"> {
-  suffixIcon?: React.ReactNode;
-}
-
-function Input({ className, type, ...props }: InputProps) {
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       type={type}
@@ -19,7 +15,7 @@ function Input({ className, type, ...props }: InputProps) {
       )}
       {...props}
     />
-  );
+  )
 }
 
-export { Input };
+export { Input }

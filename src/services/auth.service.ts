@@ -3,8 +3,8 @@ import { passwordUtil } from "@/utils/password.js";
 import { BadRequestError, UnauthorizedError } from "@/errors/ApiError.js";
 import { jwtUtil } from "@/utils/jwt.js";
 import { randomUUID } from "crypto";
-import { userDetailRepo } from "@/repos/userDetail.repo";
-import { config } from "@/config/config";
+import { userDetailRepo } from "@/repos/userDetail.repo.js";
+import { config } from "@/config/config.js";
 
 async function register(username: string, email: string, password: string) {
   const existingUser = await userRepo.findOneByEmail(email);

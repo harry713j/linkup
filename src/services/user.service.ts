@@ -1,4 +1,3 @@
-import { db } from "@/database/index.js";
 import { userRepo } from "@/repos/auth.repo.js";
 import { userDetailRepo } from "@/repos/userDetail.repo.js";
 import { BadRequestError, UnauthorizedError } from "@/errors/ApiError.js";

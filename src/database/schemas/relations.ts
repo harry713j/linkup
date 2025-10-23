@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
-import { UserTable, UserDetailTable, RefreshTokenTable } from "./users";
-import { ChatTable, ChatParticipantTable } from "./chats";
-import { MessageStatusTable, MessageTable } from "./messages";
+import { UserTable, UserDetailTable, RefreshTokenTable } from "./users.js";
+import { ChatTable, ChatParticipantTable } from "./chats.js";
+import { MessageStatusTable, MessageTable } from "./messages.js";
 
 // relationship
 export const UserTableRelations = relations(UserTable, ({ one, many }) => {

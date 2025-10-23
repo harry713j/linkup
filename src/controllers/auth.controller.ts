@@ -4,7 +4,7 @@ import {
   type LoginInput,
 } from "@/validations/auth.schema.js";
 import { authService } from "@/services/auth.service.js";
-import { config } from "@/config/config";
+import { config } from "@/config/config.js";
 
 async function register(req: Request, res: Response, next: NextFunction) {
   try {

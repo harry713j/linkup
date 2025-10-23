@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { userService } from "@/services/user.service";
+import { userService } from "@/services/user.service.js";
 import {
   UpdateEmailInput,
   UpdatePasswordInput,

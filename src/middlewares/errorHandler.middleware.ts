@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { ApiError } from "@/errors/ApiError";
+import { ApiError } from "@/errors/ApiError.js";
 
 export function errorHandler(err: any, req: Request, res: Response) {
   console.error(err);

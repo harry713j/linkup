@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { validate } from "@/middlewares/validation.middleware";
-import { verifyToken } from "@/middlewares/auth.middleware";
+import { validate } from "@/middlewares/validation.middleware.js";
+import { verifyToken } from "@/middlewares/auth.middleware.js";
 import { chatController } from "@/controllers/chat.controller.js";
 import {
   chatSchema,

@@ -8,7 +8,7 @@ import {
   primaryKey,
   index,
 } from "drizzle-orm/pg-core";
-import { UserTable } from "./users";
+import { UserTable } from "./users.js";
 
 export const ChatTypeEnum = pgEnum("chat_type", ["direct", "group"]);
 

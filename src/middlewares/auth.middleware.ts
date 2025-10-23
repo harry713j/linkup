@@ -1,5 +1,5 @@
-import { UnauthorizedError } from "@/errors/ApiError";
-import { jwtUtil } from "@/utils/jwt";
+import { UnauthorizedError } from "@/errors/ApiError.js";
+import { jwtUtil } from "@/utils/jwt.js";
 import { Request, Response, NextFunction } from "express";
 
 export async function verifyToken(
