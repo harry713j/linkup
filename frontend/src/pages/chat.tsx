@@ -24,7 +24,7 @@ export default function Chat() {
   return (
     <SidebarProvider>
       <Sidebar>
-        <SidebarHeader></SidebarHeader>
+        <SidebarHeader>{user?.username ?? "Lmao"}</SidebarHeader>
         <SidebarContent></SidebarContent>
         <SidebarFooter></SidebarFooter>
       </Sidebar>

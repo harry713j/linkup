@@ -84,8 +84,7 @@ async function logout(req: Request, res: Response, next: NextFunction) {
 async function refresh(req: Request, res: Response, next: NextFunction) {
   try {
     const refreshToken = req.cookies?.refresh_token;
-    console.log("Refresh token: ", req.cookies);
-    const jwtToken = await authService.refreshJwt(refreshToken as string);
+    const { jwtToken } = await authService.refreshJwt(refreshToken as string);
 
     res.status(200).json({
       message: "Access token refreshed successfully",
