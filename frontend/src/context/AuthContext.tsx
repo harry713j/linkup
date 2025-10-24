@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (data: LoginUser) => {
     const response = await axiosInstance.post("/auth/login", data);
+    console.log("Login Response: ", response);
     setAccessToken(response.data.accessToken);
     await fetchUser();
   };
@@ -37,7 +38,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/users/me");
+      const response = await axiosInstance.get("/users/me", {
+        withCredentials: true,
+      });
       setUser(response.data.user);
     } catch (error) {
       console.error("Failed to fetch user details: ", error);

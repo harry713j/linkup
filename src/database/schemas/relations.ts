@@ -3,6 +3,7 @@ import { UserTable, UserDetailTable, RefreshTokenTable } from "./users.js";
 import { ChatTable, ChatParticipantTable } from "./chats.js";
 import { MessageStatusTable, MessageTable } from "./messages.js";
 
+// FIX: Undefined table reference between user and user details
 // relationship
 export const UserTableRelations = relations(UserTable, ({ one, many }) => {
   return {

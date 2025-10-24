@@ -10,6 +10,7 @@ let accessToken: string | null = null;
 
 export function setAccessToken(token: string | null) {
   accessToken = token;
+  console.log("Access Token: ", accessToken)
 }
 
 axiosInstance.interceptors.request.use(
@@ -32,9 +33,11 @@ axiosInstance.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
 
+    console.log("Failed req: ", originalRequest)
+
     if (
       originalRequest.url !== "/auth/register" &&
-      originalRequest.url !== "/auth/login" &&
+      originalRequest.url !== "/auth/login" && originalRequest.url !== "/auth/refresh" &&
       error.response
     ) {
       if (error.response.status === 401 && !originalRequest._retry) {

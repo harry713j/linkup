@@ -17,7 +17,7 @@ async function register(username: string, email: string, password: string) {
   const user = await userRepo.create(username.trim(), email, passwordHash);
   const token = jwtUtil.generate({ userId: user.id, email: user.email });
   const refreshTokenValue = randomUUID();
-  const expiresAt = new Date(Date.now() + config.refreshTokenValidity);
+  const expiresAt = new Date(Date.now() + config.refreshTokenValidity * 1000);
   const refreshTokenRow = await refreshTokenRepo.create(
     user.id,
     refreshTokenValue,
@@ -43,7 +43,7 @@ async function login(email: string, password: string) {
 
   const token = jwtUtil.generate({ userId: user.id, email: user.email });
   const refreshTokenValue = randomUUID();
-  const expiresAt = new Date(Date.now() + config.refreshTokenValidity);
+  const expiresAt = new Date(Date.now() + config.refreshTokenValidity * 1000);
   const refreshTokenRow = await refreshTokenRepo.create(
     user.id,
     refreshTokenValue,

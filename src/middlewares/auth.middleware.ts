@@ -9,6 +9,7 @@ export async function verifyToken(
 ) {
   try {
     const authHeader = req.headers.authorization;
+    console.log("Auth token: ", authHeader)
     if (!authHeader) {
       throw new UnauthorizedError("Missing Authorization header");
     }

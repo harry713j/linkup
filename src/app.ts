@@ -1,9 +1,10 @@
 import express, { Application } from "express";
+import morgan from "morgan"
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { visitedEndpointsLogger } from "./utils/logger.js";
+import logger from "./utils/logger.js";
 import { config } from "./config/config.js";
 import {
   catchAllRouter,
@@ -46,7 +47,11 @@ app.use(
 
 app.use(express.json({}));
 app.use(cookieParser());
-app.use(visitedEndpointsLogger);
+app.use(morgan(":remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms", {
+  stream: {
+    write: (message) => logger.info(message.trim())
+  }
+}))
 
 app.use("/healthz", healthRouter);
 app.use("/api/v1/auth", authRouter);

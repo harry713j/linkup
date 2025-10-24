@@ -20,8 +20,8 @@ async function register(req: Request, res: Response, next: NextFunction) {
       secure: false, // true for prod(https)
       sameSite: "lax",
       path: "/",
-      maxAge: config.refreshTokenValidity,
-      expires: new Date(Date.now() + config.refreshTokenValidity),
+      maxAge: config.refreshTokenValidity * 1000,
+      expires: new Date(Date.now() + config.refreshTokenValidity * 1000),
     };
 
     res
@@ -51,8 +51,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
       secure: false, // true for prod(https)
       sameSite: "lax",
       path: "/",
-      maxAge: config.refreshTokenValidity,
-      expires: new Date(Date.now() + config.refreshTokenValidity),
+      maxAge: config.refreshTokenValidity * 1000,
+      expires: new Date(Date.now() + config.refreshTokenValidity * 1000),
     };
 
     res
@@ -84,7 +84,7 @@ async function logout(req: Request, res: Response, next: NextFunction) {
 async function refresh(req: Request, res: Response, next: NextFunction) {
   try {
     const refreshToken = req.cookies?.refresh_token;
-    console.log("Refresh token: ", refreshToken);
+    console.log("Refresh token: ", req.cookies);
     const jwtToken = await authService.refreshJwt(refreshToken as string);
 
     res.status(200).json({
