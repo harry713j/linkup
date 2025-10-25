@@ -53,6 +53,7 @@ async function findByID(userId: string) {
     where: eq(UserTable.id, userId),
     with: {
       userDetail: true,
+      chatParticipants: true
     },
   });
 }

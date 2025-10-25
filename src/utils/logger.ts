@@ -1,7 +1,6 @@
 import { createLogger, format, transports } from "winston"
 
 const { colorize, printf, combine, timestamp } = format
-
 const logFormat = printf(({ level, message, timestamp }) => {
   return `[${timestamp}] ${level}: ${message}`
 })
