@@ -41,7 +41,7 @@ export function UserProfile(props: UserProfileProps) {
               ) : (
                 <span className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-800">
                   <p className="text-2xl font-semibold text-slate-200">
-                    {props.displayName.slice(0, 1).toUpperCase()}
+                    {props.displayName?.slice(0, 1).toUpperCase()}
                   </p>
                 </span>
               )}
@@ -69,7 +69,7 @@ export function UserProfile(props: UserProfileProps) {
               ) : (
                 <div className="w-24 h-24 rounded-full flex items-center justify-center bg-blue-700">
                   <p className="text-2xl font-semibold text-slate-200">
-                    {props.displayName.slice(0, 1).toUpperCase()}
+                    {props.displayName?.slice(0, 1).toUpperCase()}
                   </p>
                 </div>
               )}

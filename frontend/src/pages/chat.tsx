@@ -10,6 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Loader2 } from "lucide-react";
 import { UserProfile, HeaderSearchbar } from "@/components";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
 // sidebar to show all the chats user in
 // search bar to search for user or
 export default function Chat() {
@@ -24,9 +25,11 @@ export default function Chat() {
     );
   }
 
-  if (!user) {
-    navigate("/login");
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <SidebarProvider>
