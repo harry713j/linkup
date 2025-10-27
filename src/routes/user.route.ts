@@ -11,6 +11,8 @@ import { userController } from "@/controllers/user.controller.js";
 
 const router = Router();
 
+router.get("", verifyToken, userController.fetchAll)
+
 router.patch(
   "/me/email",
   verifyToken,

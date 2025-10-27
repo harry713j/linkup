@@ -1,6 +1,6 @@
 import { db } from "@/database/index.js";
 import { UserDetailTable, UserTable } from "@/database/schemas/users.js";
-import { eq } from "drizzle-orm";
+import { eq, like, sql } from "drizzle-orm";
 
 async function create(userId: string, displayName: string) {
   return await db.insert(UserDetailTable).values({ userID: userId, displayName: displayName });
@@ -58,10 +58,56 @@ async function findByID(userId: string) {
   });
 }
 
+async function findAll(page: number, limit: number, keyword: string) {
+  if (page < 0) {
+    page = 1
+  }
+
+  if (limit < 10) {
+    limit = 10
+  }
+
+  const offset = (page - 1) * limit
+
+  const users = await db.query.UserTable.findMany({
+    columns: {
+      id: true, username: true, email: true
+    },
+    where: like(UserTable.username, keyword),
+    with: {
+      userDetail: {
+        columns: {
+          displayName: true,
+          profileUrl: true
+        }
+      }
+    },
+    limit: limit,
+    offset: offset
+  })
+
+  const result = await db.execute(
+    sql`SELECT COUNT(id) AS count FROM ${UserTable} WHERE username ILIKE %${keyword}%`
+  );
+  const usersCount = Number(result.rows[0]?.count ?? 0);
+  const totalPages = (usersCount + limit - 1) / limit;
+
+  return {
+    data: users,
+    meta: {
+      pages: totalPages,
+      page: page,
+      limit: limit,
+      total: usersCount
+    }
+  }
+}
+
 export const userDetailRepo = {
   create,
   update,
   updateProfileUrl,
   findByID,
   deleteProfileUrl,
+  findAll
 };

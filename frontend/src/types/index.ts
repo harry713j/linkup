@@ -25,3 +25,13 @@ export interface AuthContextType {
   login: (data: LoginUser) => Promise<void>;
   logout: () => Promise<void>;
 }
+
+export interface PaginatedResponse<T> {
+  data: Array<T>
+  meta: {
+    pages: number,
+    page: number
+    total: number
+    limit: number
+  }
+}

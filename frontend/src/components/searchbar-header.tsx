@@ -19,6 +19,7 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+import { DirectChat } from "./direct-chat";
 
 export function HeaderSearchbar() {
   const [openOne, setOpenOne] = useState<boolean>(false);
@@ -61,24 +62,7 @@ export function HeaderSearchbar() {
           </PopoverContent>
         </Popover>
 
-        <Dialog open={openOne} onOpenChange={setOpenOne}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Edit profile</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4"></div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit">Save changes</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <DirectChat open={openOne} setOpen={setOpenOne} />
 
         <Dialog open={openGroup} onOpenChange={setOpenGroup}>
           <DialogContent className="sm:max-w-[425px]">

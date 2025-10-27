@@ -84,6 +84,18 @@ async function fetchUser(userId: string) {
   return user;
 }
 
+async function fetchAll(userId: string, pageStr: string, limitStr: string, keyword: string) {
+  const existingUser = await userRepo.findByID(userId)
+  if (!existingUser) {
+    throw new UnauthorizedError()
+  }
+  const page = Number(pageStr)
+  const limit = Number(limitStr)
+  const paginatedResponse = await userDetailRepo.findAll(page, limit, keyword)
+
+  return paginatedResponse
+}
+
 export const userService = {
   updateEmail,
   updatePassword,
@@ -91,4 +103,5 @@ export const userService = {
   removeProfileUrl,
   update,
   fetchUser,
+  fetchAll
 };

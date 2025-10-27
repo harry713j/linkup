@@ -117,6 +117,20 @@ async function fetchUser(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function fetchAll(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.user?.id
+    const { keyword, page, limit } = req.params
+    const paginatedUsers = await userService.fetchAll(userId as string, page, limit, keyword)
+    res.status(200).json({
+      message: "Successfully fetched users",
+      ...paginatedUsers
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const userController = {
   update,
   updateEmail,
@@ -124,4 +138,5 @@ export const userController = {
   updateProfileUrl,
   removeProfileUrl,
   fetchUser,
+  fetchAll
 };

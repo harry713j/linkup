@@ -76,7 +76,7 @@ async function fetchAll(chatId: string, page: number, limit: number) {
   const totalPages = (messagesCount + limit - 1) / limit;
 
   return {
-    messages: messages,
+    data: messages,
     meta: {
       total: messagesCount,
       page: page,
