@@ -3,12 +3,14 @@ import { UserDetailTable, UserTable } from "@/database/schemas/users.js";
 import { eq, like, sql } from "drizzle-orm";
 
 async function create(userId: string, displayName: string) {
-  return await db.insert(UserDetailTable).values({ userID: userId, displayName: displayName });
+  return await db
+    .insert(UserDetailTable)
+    .values({ userID: userId, displayName: displayName });
 }
 
 async function update(
   userId: string,
-  data: { bio?: string; status?: boolean, displayName?: string }
+  data: { bio?: string; status?: boolean; displayName?: string }
 ) {
   const updateData: any = {};
   if (data.bio) {
@@ -16,7 +18,7 @@ async function update(
   }
 
   if (!data.displayName) {
-    updateData.displayName = data.displayName
+    updateData.displayName = data.displayName;
   }
 
   if (typeof data.status === "boolean") {
@@ -30,7 +32,8 @@ async function update(
   return await db
     .update(UserDetailTable)
     .set(updateData)
-    .where(eq(UserDetailTable.userID, userId)).returning();
+    .where(eq(UserDetailTable.userID, userId))
+    .returning();
 }
 
 async function updateProfileUrl(userId: string, profileUrl: string) {
@@ -53,38 +56,40 @@ async function findByID(userId: string) {
     where: eq(UserTable.id, userId),
     with: {
       userDetail: true,
-      chatParticipants: true
+      chatParticipants: true,
     },
   });
 }
 
 async function findAll(page: number, limit: number, keyword: string) {
   if (page < 0) {
-    page = 1
+    page = 1;
   }
 
   if (limit < 10) {
-    limit = 10
+    limit = 10;
   }
 
-  const offset = (page - 1) * limit
+  const offset = (page - 1) * limit;
 
   const users = await db.query.UserTable.findMany({
     columns: {
-      id: true, username: true, email: true
+      id: true,
+      username: true,
+      email: true,
     },
     where: like(UserTable.username, keyword),
     with: {
       userDetail: {
         columns: {
           displayName: true,
-          profileUrl: true
-        }
-      }
+          profileUrl: true,
+        },
+      },
     },
     limit: limit,
-    offset: offset
-  })
+    offset: offset,
+  });
 
   const result = await db.execute(
     sql`SELECT COUNT(id) AS count FROM ${UserTable} WHERE username ILIKE %${keyword}%`
@@ -98,9 +103,9 @@ async function findAll(page: number, limit: number, keyword: string) {
       pages: totalPages,
       page: page,
       limit: limit,
-      total: usersCount
-    }
-  }
+      total: usersCount,
+    },
+  };
 }
 
 export const userDetailRepo = {
@@ -109,5 +114,5 @@ export const userDetailRepo = {
   updateProfileUrl,
   findByID,
   deleteProfileUrl,
-  findAll
+  findAll,
 };

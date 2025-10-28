@@ -10,7 +10,7 @@ async function update(userId: string, data: UpdateUserDetailInput) {
     throw new UnauthorizedError();
   }
 
-  return await userDetailRepo.update(userId, data)
+  return await userDetailRepo.update(userId, data);
 }
 
 async function updateEmail(userId: string, email: string) {
@@ -84,16 +84,21 @@ async function fetchUser(userId: string) {
   return user;
 }
 
-async function fetchAll(userId: string, pageStr: string, limitStr: string, keyword: string) {
-  const existingUser = await userRepo.findByID(userId)
+async function fetchAll(
+  userId: string,
+  pageStr: string,
+  limitStr: string,
+  keyword: string
+) {
+  const existingUser = await userRepo.findByID(userId);
   if (!existingUser) {
-    throw new UnauthorizedError()
+    throw new UnauthorizedError();
   }
-  const page = Number(pageStr)
-  const limit = Number(limitStr)
-  const paginatedResponse = await userDetailRepo.findAll(page, limit, keyword)
+  const page = Number(pageStr);
+  const limit = Number(limitStr);
+  const paginatedResponse = await userDetailRepo.findAll(page, limit, keyword);
 
-  return paginatedResponse
+  return paginatedResponse;
 }
 
 export const userService = {
@@ -103,5 +108,5 @@ export const userService = {
   removeProfileUrl,
   update,
   fetchUser,
-  fetchAll
+  fetchAll,
 };

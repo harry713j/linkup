@@ -1,12 +1,12 @@
 import type { LoginUser, RegisterUser } from "@/schema";
 
 export interface UserDetail {
-  displayName: string | null
-  bio: string | null
-  userID: string
-  status: boolean
-  profileUrl: string | null
-  updatedAt: Date
+  displayName: string | null;
+  bio: string | null;
+  userID: string;
+  status: boolean;
+  profileUrl: string | null;
+  updatedAt: Date;
 }
 
 export interface User {
@@ -27,11 +27,11 @@ export interface AuthContextType {
 }
 
 export interface PaginatedResponse<T> {
-  data: Array<T>
+  data: Array<T>;
   meta: {
-    pages: number,
-    page: number
-    total: number
-    limit: number
-  }
+    pages: number;
+    page: number;
+    total: number;
+    limit: number;
+  };
 }

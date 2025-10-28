@@ -6,7 +6,7 @@ export async function handleHealth(req: Request, res: Response) {
       message: "Server is running well!",
     });
   } catch (error) {
-    console.error("Server Error: ", error)
+    console.error("Server Error: ", error);
     res.status(500).json({
       message: "Something went wrong!",
     });

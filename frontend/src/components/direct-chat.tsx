@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import axiosInstance from "@/api";
 import { AxiosError } from "axios";
-import { directChatSchema } from "@/schema";
+import { directChatSchema, type ParticipantIDType } from "@/schema";
 import * as z from "zod";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
@@ -36,7 +36,7 @@ type DirectChatProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-type SearchUser = {
+export type SearchUser = {
   id: string;
   email: string;
   username: string;
@@ -46,14 +46,10 @@ type SearchUser = {
   } | null;
 };
 
-const participantID = z.uuid();
-
 // FIX: Check it is working or not
-
 export function DirectChat({ open, setOpen }: DirectChatProps) {
   const { user } = useAuth();
-  const [participant, setParticipant] =
-    useState<z.infer<typeof participantID>>("");
+  const [participant, setParticipant] = useState<ParticipantIDType>("");
   const [isLoading, SetIsLoading] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
@@ -105,13 +101,14 @@ export function DirectChat({ open, setOpen }: DirectChatProps) {
 
     const parsedValue = z.safeParse(directChatSchema, payload);
     if (!parsedValue.success) {
-      toast.error("Failed to create chat");
+      toast.error(parsedValue.error.message);
       return;
     }
 
     try {
       const response = await axiosInstance.post("/chat", parsedValue.data);
       toast.success(response.data.message);
+      setOpen(false);
     } catch (error) {
       const err = error as AxiosError;
       const errMsg =

@@ -20,7 +20,10 @@ export const UserTable = pgTable(
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
   },
-  (table) => [uniqueIndex("username_idx").on(table.username), uniqueIndex("email_idx").on(table.email)]
+  (table) => [
+    uniqueIndex("username_idx").on(table.username),
+    uniqueIndex("email_idx").on(table.email),
+  ]
 );
 
 export const UserDetailTable = pgTable(

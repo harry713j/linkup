@@ -1,6 +1,4 @@
-import { UserProfile } from "@/components/user-profile"
-import { HeaderSearchbar } from "@/components/searchbar-header"
+import { UserProfile } from "@/components/user-profile";
+import { HeaderSearchbar } from "@/components/searchbar-header";
 
-export {
-    UserProfile, HeaderSearchbar
-}
+export { UserProfile, HeaderSearchbar };

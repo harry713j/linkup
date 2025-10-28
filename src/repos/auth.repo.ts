@@ -2,11 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../database/index.js";
 import { RefreshTokenTable, UserTable } from "@/database/schemas/users.js";
 
-async function create(
-  username: string,
-  email: string,
-  passwordHash: string
-) {
+async function create(username: string, email: string, passwordHash: string) {
   const [user] = await db
     .insert(UserTable)
     .values({
@@ -33,8 +29,8 @@ async function findOneByEmail(email: string) {
 
 async function findByUsername(username: string) {
   return await db.query.UserTable.findFirst({
-    where: eq(UserTable.username, username)
-  })
+    where: eq(UserTable.username, username),
+  });
 }
 
 async function findByID(id: string) {
