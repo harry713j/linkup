@@ -6,6 +6,7 @@ import {
   UpdateProfileUrlInput,
   UpdateUserDetailInput,
 } from "@/validations/user.schema.js";
+import logger from "@/logging/logger.js";
 
 async function update(req: Request, res: Response, next: NextFunction) {
   try {
@@ -23,6 +24,10 @@ async function update(req: Request, res: Response, next: NextFunction) {
       user: user,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to update user details: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -38,6 +43,10 @@ async function updateEmail(req: Request, res: Response, next: NextFunction) {
       user: user,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to update user email: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -58,6 +67,10 @@ async function updatePassword(req: Request, res: Response, next: NextFunction) {
       user: user,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to update user password: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -81,6 +94,10 @@ async function updateProfileUrl(
       user: user,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to update user profile picture: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -99,6 +116,10 @@ async function removeProfileUrl(
       user: user,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to remove user profile picture: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -113,6 +134,10 @@ async function fetchUser(req: Request, res: Response, next: NextFunction) {
       user: user,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to fetch user details: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -132,6 +157,10 @@ async function fetchAll(req: Request, res: Response, next: NextFunction) {
       ...paginatedUsers,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to fetch all users details: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }

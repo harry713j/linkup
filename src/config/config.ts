@@ -8,6 +8,8 @@ const refreshTokenValidity = parseInt(
   10
 );
 
+const environment = process.env.NODE_ENV as string;
+
 if (typeof refreshTokenValidity !== "number") {
   throw new Error("Invalid Refresh Token Expiry value from .env");
 }
@@ -19,4 +21,5 @@ export const config = {
   jwtExpiry: process.env.JWT_EXPIRY as string,
   whitelists: allowedOrigins,
   refreshTokenValidity: refreshTokenValidity,
+  environment: environment,
 };

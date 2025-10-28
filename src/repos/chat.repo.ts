@@ -3,6 +3,7 @@ import { ChatParticipantTable, ChatTable } from "@/database/schemas/chats.js";
 import type { ChatType } from "@/validations/chat.schema.js";
 import { eq, sql } from "drizzle-orm";
 import type { Participant } from "@/types/chat";
+import logger from "@/logging/logger.js";
 
 async function create(
   tx: Transaction,
@@ -11,19 +12,32 @@ async function create(
   adminId?: string,
   groupIcon?: string
 ) {
-  const insertData: any = {};
-  insertData.type = type;
-  insertData.name = name;
-  if (adminId) {
-    insertData.adminID = adminId;
-  }
-  if (groupIcon) {
-    insertData.groupIcon = groupIcon;
-  }
+  try {
+    const insertData: any = {};
+    insertData.type = type;
+    insertData.name = name;
+    if (adminId) {
+      insertData.adminID = adminId;
+    }
+    if (groupIcon) {
+      insertData.groupIcon = groupIcon;
+    }
 
-  const [chat] = await tx.insert(ChatTable).values(insertData).returning();
+    const [chat] = await tx.insert(ChatTable).values(insertData).returning();
 
-  return chat;
+    logger.debug(
+      `Crate chat entry with id=${chat.id}, name=${name} and type=${type}`
+    );
+    return chat;
+  } catch (error) {
+    const err = error as Error;
+    logger.error(
+      `Failed to create chat entry in DB with name=${name} and type=${type}: ${err.message}`,
+      { stack: err.message }
+    );
+
+    throw error;
+  }
 }
 
 async function update(
@@ -32,51 +46,101 @@ async function update(
   groupIcon?: string,
   adminId?: string
 ) {
-  const updateData: any = {};
+  try {
+    const updateData: any = {};
 
-  if (name) {
-    updateData.name = name;
-  }
-  if (adminId) {
-    updateData.adminID = adminId;
-  }
-  if (groupIcon) {
-    updateData.groupIcon = groupIcon;
-  }
+    if (name) {
+      updateData.name = name;
+    }
+    if (adminId) {
+      updateData.adminID = adminId;
+    }
+    if (groupIcon) {
+      updateData.groupIcon = groupIcon;
+    }
 
-  const [updatedChat] = await db
-    .update(ChatTable)
-    .set(updateData)
-    .where(eq(ChatTable.id, chatId))
-    .returning();
-  return updatedChat;
+    const [updatedChat] = await db
+      .update(ChatTable)
+      .set(updateData)
+      .where(eq(ChatTable.id, chatId))
+      .returning();
+
+    logger.debug(`Update chat entry with id=${chatId}`);
+    return updatedChat;
+  } catch (error) {
+    const err = error as Error;
+    logger.error(
+      `Failed to update chat entry in DB with chat id=${chatId}: ${err.message}`,
+      { stack: err.message }
+    );
+
+    throw error;
+  }
 }
 
 async function findAll(userId: string) {
-  return await db.query.ChatParticipantTable.findMany({
-    where: eq(ChatParticipantTable.participantID, userId),
-    with: {
-      chat: true,
-    },
-  });
+  try {
+    const chats = await db.query.ChatParticipantTable.findMany({
+      where: eq(ChatParticipantTable.participantID, userId),
+      with: {
+        chat: true,
+      },
+    });
+
+    logger.debug("Fetched all chats of an user with user id=" + userId);
+    return chats;
+  } catch (error) {
+    const err = error as Error;
+    logger.error(
+      `Failed to fetch chats of user with user id=${userId}: ${err.message}`,
+      { stack: err.message }
+    );
+
+    throw error;
+  }
 }
 
 async function findOne(chatId: string) {
-  return await db.query.ChatTable.findFirst({
-    where: eq(ChatTable.id, chatId),
-    with: {
-      creator: true,
-      participants: true,
-    },
-  });
+  try {
+    const chat = await db.query.ChatTable.findFirst({
+      where: eq(ChatTable.id, chatId),
+      with: {
+        creator: true,
+        participants: true,
+      },
+    });
+
+    logger.debug(`Fetch chat with chat id=${chatId}`);
+    return chat;
+  } catch (error) {
+    const err = error as Error;
+    logger.error(
+      `Failed to fetch chat with chat id=${chatId}: ${err.message}`,
+      { stack: err.message }
+    );
+
+    throw error;
+  }
 }
 
 async function deleteChat(chatId: string) {
-  const [deletedId] = await db
-    .delete(ChatTable)
-    .where(eq(ChatTable.id, chatId))
-    .returning({ chatId: ChatTable.id });
-  return deletedId;
+  try {
+    const [deletedId] = await db
+      .delete(ChatTable)
+      .where(eq(ChatTable.id, chatId))
+      .returning({ chatId: ChatTable.id });
+
+    logger.debug(`Remove chat with chat id=${chatId}`);
+    return deletedId;
+  } catch (error) {
+    const err = error as Error;
+    logger.error(
+      `Failed to remove chat with chat id=${chatId}: ${err.message}`,
+      { stack: err.message }
+    );
+
+    throw error;
+  }
 }
 
 export const chatRepo = {
@@ -93,54 +157,103 @@ export const chatParticipantRepo = {
     chatId: string,
     ...participants: Participant[]
   ) {
-    const insertData = participants.map((participant) => {
-      return {
-        chatID: chatId,
-        participantID: participant.participantID,
-        role: participant.role,
-      };
-    });
-    const insertResult = await tx
-      .insert(ChatParticipantTable)
-      .values(insertData)
-      .returning();
+    try {
+      const insertData = participants.map((participant) => {
+        return {
+          chatID: chatId,
+          participantID: participant.participantID,
+          role: participant.role,
+        };
+      });
+      const insertResult = await tx
+        .insert(ChatParticipantTable)
+        .values(insertData)
+        .returning();
 
-    return insertResult;
+      logger.debug(`Create chat participant entry of chat id=${chatId}`);
+      return insertResult;
+    } catch (error) {
+      const err = error as Error;
+      logger.error(
+        `Failed to create chat participants entry in DB with chat id=${chatId}: ${err.message}`,
+        { stack: err.message }
+      );
+
+      throw error;
+    }
   },
   async findAll(chatId: string) {
-    return await db.query.ChatParticipantTable.findMany({
-      where: eq(ChatParticipantTable.chatID, chatId),
-      with: {
-        user: {
-          with: {
-            userDetail: true,
+    try {
+      const participants = await db.query.ChatParticipantTable.findMany({
+        where: eq(ChatParticipantTable.chatID, chatId),
+        with: {
+          user: {
+            with: {
+              userDetail: true,
+            },
           },
         },
-      },
-    });
+      });
+
+      logger.debug(`Fetched all participants of chat id=${chatId}`);
+      return participants;
+    } catch (error) {
+      const err = error as Error;
+      logger.error(
+        `Failed to fetch all chat participants with chat id=${chatId}: ${err.message}`,
+        { stack: err.message }
+      );
+
+      throw error;
+    }
   },
   async createParticipants(chatId: string, ...participants: Participant[]) {
-    const insertData = participants.map((participant) => {
-      return {
-        chatID: chatId,
-        participantID: participant.participantID,
-        role: participant.role,
-      };
-    });
-    const insertResult = await db
-      .insert(ChatParticipantTable)
-      .values(insertData)
-      .returning();
+    try {
+      const insertData = participants.map((participant) => {
+        return {
+          chatID: chatId,
+          participantID: participant.participantID,
+          role: participant.role,
+        };
+      });
+      const insertResult = await db
+        .insert(ChatParticipantTable)
+        .values(insertData)
+        .returning();
 
-    return insertResult;
+      logger.debug(`Create chat participants entry of chat id=${chatId}`);
+      return insertResult;
+    } catch (error) {
+      const err = error as Error;
+      logger.error(
+        `Failed to create chat participants entry in DB with chat id=${chatId}: ${err.message}`,
+        { stack: err.message }
+      );
+
+      throw error;
+    }
   },
   async delete(chatId: string, participantId: string) {
-    const deleteResult = await db
-      .delete(ChatParticipantTable)
-      .where(
-        sql`${ChatParticipantTable.chatID} = ${chatId} AND ${ChatParticipantTable.participantID} = ${participantId}`
-      )
-      .returning();
-    return deleteResult;
+    try {
+      const deleteResult = await db
+        .delete(ChatParticipantTable)
+        .where(
+          sql`${ChatParticipantTable.chatID} = ${chatId} AND ${ChatParticipantTable.participantID} = ${participantId}`
+        )
+        .returning();
+
+      logger.debug(
+        `Remove chat participants with id=${participantId} from chat id=${chatId}`
+      );
+      return deleteResult;
+    } catch (error) {
+      const err = error as Error;
+      logger.error(
+        `Failed to remove chat participant with participant id=${participantId} from chat id=${chatId}: ${err.message}`,
+        { stack: err.message }
+      );
+
+      throw error;
+    }
   },
 };

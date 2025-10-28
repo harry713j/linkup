@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { messageService } from "@/services/message.service.js";
 import { DeleteMessageInput } from "@/validations/message.schema.js";
+import logger from "@/logging/logger.js";
 
 async function deleteMessage(req: Request, res: Response, next: NextFunction) {
   try {
@@ -16,6 +17,10 @@ async function deleteMessage(req: Request, res: Response, next: NextFunction) {
 
     res.status(204);
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to delete message from chat: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }

@@ -5,6 +5,7 @@ import {
   UpdateChatInput,
   AddParticipantInput,
 } from "@/validations/chat.schema.js";
+import logger from "@/logging/logger.js";
 
 async function createChat(req: Request, res: Response, next: NextFunction) {
   try {
@@ -17,6 +18,8 @@ async function createChat(req: Request, res: Response, next: NextFunction) {
       chat: chat,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to create chat: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
@@ -37,6 +40,8 @@ async function updateChat(req: Request, res: Response, next: NextFunction) {
       chat: updatedChat,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to update chat: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
@@ -52,6 +57,10 @@ async function fetchAllChats(req: Request, res: Response, next: NextFunction) {
       chats: chats,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to fetch all chats for an user: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -67,6 +76,8 @@ async function fetchChat(req: Request, res: Response, next: NextFunction) {
       chat: chat,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to fetch chat: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
@@ -92,6 +103,10 @@ async function fetchAllMessage(
       data: messages,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to fetch all messages of an chat: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -106,6 +121,10 @@ async function removeChat(req: Request, res: Response, next: NextFunction) {
       message: "Chat removed successfully",
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to delete a chat: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -130,6 +149,10 @@ async function addParticipants(
       participants: participants,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to add participants to a chat: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -152,6 +175,10 @@ async function removeParticipants(
       message: "Participant removed successfully",
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to remove participant from chat: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }
@@ -174,6 +201,10 @@ async function fetchAllParticipants(
       participants: participants,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`Failed to fetch all participants of a chat: ${err.message}`, {
+      stack: err.stack,
+    });
     next(error);
   }
 }

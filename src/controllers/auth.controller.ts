@@ -5,6 +5,7 @@ import {
 } from "@/validations/auth.schema.js";
 import { authService } from "@/services/auth.service.js";
 import { config } from "@/config/config.js";
+import logger from "@/logging/logger.js";
 
 async function register(req: Request, res: Response, next: NextFunction) {
   try {
@@ -33,7 +34,8 @@ async function register(req: Request, res: Response, next: NextFunction) {
         accessToken: token,
       });
   } catch (error) {
-    // delegate error handling to global error handling
+    const err = error as Error;
+    logger.error(`User Sign up failed: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
@@ -64,6 +66,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
         accessToken: token,
       });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`User login failed: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
@@ -77,6 +81,8 @@ async function logout(req: Request, res: Response, next: NextFunction) {
       message: "User logout successful",
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`User logout failed: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
@@ -91,6 +97,8 @@ async function refresh(req: Request, res: Response, next: NextFunction) {
       accessToken: jwtToken,
     });
   } catch (error) {
+    const err = error as Error;
+    logger.error(`JWT refresh failed: ${err.message}`, { stack: err.stack });
     next(error);
   }
 }
