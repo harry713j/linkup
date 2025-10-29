@@ -9,13 +9,11 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { Loader2 } from "lucide-react";
 import { UserProfile, HeaderSearchbar } from "@/components";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
+
 // sidebar to show all the chats user in
 // search bar to search for user or
 export default function Chat() {
   const { loading, user } = useAuth();
-  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -35,7 +33,6 @@ export default function Chat() {
         <SidebarFooter>
           <UserProfile
             displayName={user?.userDetail.displayName as string}
-            email={user?.email as string}
             username={user?.username as string}
             bio={user?.userDetail.bio as string}
             profilePictureUrl={user?.userDetail.profileUrl as string}
