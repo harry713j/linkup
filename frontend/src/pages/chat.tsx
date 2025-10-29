@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/context/AuthContext";
 import { Loader2 } from "lucide-react";
-import { UserProfile, HeaderSearchbar } from "@/components";
+import { UserProfile, SidebarHeader as SidebarTop } from "@/components";
 
 // sidebar to show all the chats user in
 // search bar to search for user or
@@ -25,9 +25,9 @@ export default function Chat() {
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar collapsible="offcanvas">
         <SidebarHeader>
-          <HeaderSearchbar />
+          <SidebarTop />
         </SidebarHeader>
         <SidebarContent></SidebarContent>
         <SidebarFooter>
@@ -40,7 +40,7 @@ export default function Chat() {
           />
         </SidebarFooter>
       </Sidebar>
-      <SidebarTrigger />
+      <SidebarTrigger className="hidden" />
       <div>{/** Sidebar content */}</div>
     </SidebarProvider>
   );

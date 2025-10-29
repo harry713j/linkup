@@ -155,6 +155,7 @@ export function UserProfile(props: UserProfileProps) {
                       <Button
                         className="absolute -top-4 right-2"
                         variant="ghost"
+                        size="icon"
                         onClick={() => setEditing(false)}
                       >
                         <PenOff className="w-4 h-4" />
@@ -189,7 +190,11 @@ export function UserProfile(props: UserProfileProps) {
                       {props.displayName}
                     </h2>
                     {!editing && (
-                      <Button variant="ghost" onClick={() => setEditing(true)}>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setEditing(true)}
+                        size="icon"
+                      >
                         <Pen className="w-4 h-4" />
                       </Button>
                     )}

@@ -4,16 +4,27 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { EllipsisVertical, LogOut, User, Users } from "lucide-react";
+import {
+  EllipsisVertical,
+  LogOut,
+  User,
+  Users,
+  Lock,
+  Mail,
+} from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { DirectChat } from "./direct-chat";
 import { GroupChat } from "./group-chat";
+import { EmailForm } from "./email-form";
+import { PasswordForm } from "./password-form";
 
-export function HeaderSearchbar() {
+export function SidebarHeader() {
   const [openOne, setOpenOne] = useState<boolean>(false);
   const [openGroup, setOpenGroup] = useState<boolean>(false);
+  const [openMail, setOpenMail] = useState<boolean>(false);
+  const [openPassword, setOpenPassword] = useState<boolean>(false);
   const { logout } = useAuth();
 
   const onLogout = async () => {
@@ -45,6 +56,12 @@ export function HeaderSearchbar() {
                 <Users />
                 Create Group
               </Button>
+              <Button variant="ghost" onClick={() => setOpenMail(true)}>
+                <Mail /> Change Email
+              </Button>
+              <Button variant="ghost" onClick={() => setOpenPassword(true)}>
+                <Lock /> Change Password
+              </Button>
               <Button variant="ghost" onClick={onLogout}>
                 <LogOut /> Logout
               </Button>
@@ -54,6 +71,8 @@ export function HeaderSearchbar() {
 
         <DirectChat open={openOne} setOpen={setOpenOne} />
         <GroupChat open={openGroup} setOpen={setOpenGroup} />
+        <EmailForm open={openMail} setOpen={setOpenMail} />
+        <PasswordForm open={openPassword} setOpen={setOpenPassword} />
       </div>
     </div>
   );

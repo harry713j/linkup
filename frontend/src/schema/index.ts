@@ -43,18 +43,29 @@ export const updateEmailSchema = z.object({
   email: z.email({ error: "Invalid email" }),
 });
 
-export const updatePasswordSchema = z.object({
-  oldPassword: z.string().nonempty(),
-  newPassword: z
-    .string()
-    .nonempty()
-    .min(6, { error: "Password is too short" })
-    .max(20, { error: "Password length must not exceed 20 characters" })
-    .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$!%^&~]).+$/, {
-      error:
-        "Password must contain at least one letter, one number and one special character like [@,#,$,!,%,^,&,~]",
-    }),
-});
+export const updatePasswordSchema = z
+  .object({
+    oldPassword: z.string().nonempty(),
+    newPassword: z
+      .string()
+      .nonempty()
+      .min(6, { error: "Password is too short" })
+      .max(20, { error: "Password length must not exceed 20 characters" })
+      .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$!%^&~]).+$/, {
+        error:
+          "Password must contain at least one letter, one number and one special character like [@,#,$,!,%,^,&,~]",
+      }),
+    confirmPassword: z.string().nonempty(),
+  })
+  .refine((data) => data.oldPassword === data.newPassword, {
+    path: ["newPassword"],
+    error: "Old and new password are same",
+    abort: true,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ["confirmPassword"],
+    error: "Password do not match",
+  });
 
 export const updateProfileUrl = z.object({
   profileUrl: z.url({ error: "Invalid profile url" }),
