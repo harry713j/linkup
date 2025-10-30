@@ -1,7 +1,7 @@
 import { db, Transaction } from "@/database/index.js";
 import { ChatParticipantTable, ChatTable } from "@/database/schemas/chats.js";
 import type { ChatType } from "@/validations/chat.schema.js";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import type { Participant } from "@/types/chat";
 import logger from "@/logging/logger.js";
 
@@ -78,21 +78,96 @@ async function update(
   }
 }
 
-async function findAll(userId: string) {
+async function findAllGroups(userId: string) {
   try {
-    const chats = await db.query.ChatParticipantTable.findMany({
-      where: eq(ChatParticipantTable.participantID, userId),
-      with: {
-        chat: true,
-      },
+    const chats = await db.query.ChatTable.findMany({
+      where: and(
+        eq(ChatTable.type, "group"),
+        inArray(
+          ChatTable.id,
+          db
+            .select({ id: ChatParticipantTable.chatID })
+            .from(ChatParticipantTable)
+            .where(eq(ChatParticipantTable.participantID, userId))
+        )
+      ),
+      columns: { id: true, name: true, type: true, groupIcon: true },
     });
 
-    logger.debug("Fetched all chats of an user with user id=" + userId);
-    return chats;
+    const result = chats.map((chat) => {
+      return {
+        id: chat.id,
+        type: chat.type,
+        icon: chat.groupIcon,
+        name: chat.name,
+      };
+    });
+
+    logger.debug("Fetched all group chats of an user with user id=" + userId);
+    return result;
   } catch (error) {
     const err = error as Error;
     logger.error(
-      `Failed to fetch chats of user with user id=${userId}: ${err.message}`,
+      `Failed to fetch group chats of user with user id=${userId}: ${err.message}`,
+      { stack: err.message }
+    );
+
+    throw error;
+  }
+}
+
+async function findAllDirects(userId: string) {
+  try {
+    const chats = await db.query.ChatTable.findMany({
+      where: and(
+        eq(ChatTable.type, "group"),
+        inArray(
+          ChatTable.id,
+          db
+            .select({ id: ChatParticipantTable.chatID })
+            .from(ChatParticipantTable)
+            .where(eq(ChatParticipantTable.participantID, userId))
+        )
+      ),
+      columns: { id: true, type: true },
+      with: {
+        participants: {
+          columns: {
+            participantID: true,
+          },
+          with: {
+            user: {
+              with: {
+                userDetail: {
+                  columns: {
+                    displayName: true,
+                    profileUrl: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const result = chats.map((chat) => {
+      const other = chat.participants.find((p) => p.participantID !== userId);
+
+      return {
+        id: chat.id,
+        type: chat.type,
+        name: other?.user?.userDetail?.displayName,
+        icon: other?.user?.userDetail?.profileUrl ?? null,
+      };
+    });
+
+    logger.debug("Fetched all direct chats of an user with user id=" + userId);
+    return result;
+  } catch (error) {
+    const err = error as Error;
+    logger.error(
+      `Failed to fetch direct chats of user with user id=${userId}: ${err.message}`,
       { stack: err.message }
     );
 
@@ -146,7 +221,8 @@ async function deleteChat(chatId: string) {
 export const chatRepo = {
   create,
   update,
-  findAll,
+  findAllGroups,
+  findAllDirects,
   findOne,
   deleteChat,
 };

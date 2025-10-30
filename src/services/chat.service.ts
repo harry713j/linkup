@@ -112,8 +112,11 @@ async function fetchAllChats(userId: string) {
     throw new UnauthorizedError();
   }
 
+  const groupChats = await chatRepo.findAllGroups(userId);
+  const directChats = await chatRepo.findAllDirects(userId);
+
   logger.info(`Retrieval of all chats successful for user id=${userId}`);
-  return await chatRepo.findAll(userId);
+  return [...directChats, ...groupChats];
 }
 
 async function fetchChat(userId: string, chatId: string) {

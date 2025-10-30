@@ -9,6 +9,7 @@ export const db = drizzle({
   connection: config.dbUrl,
   casing: "snake_case",
   schema: { ...chatSchema, ...userSchema, ...messageSchema, ...relations },
+  logger: config.environment !== "production",
 });
 
 export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];

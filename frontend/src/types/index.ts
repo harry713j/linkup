@@ -1,4 +1,4 @@
-import type { LoginUser, RegisterUser } from "@/schema";
+import type { ChatType, LoginUser, RegisterUser } from "@/schema";
 
 export interface UserDetail {
   displayName: string | null;
@@ -35,3 +35,10 @@ export interface PaginatedResponse<T> {
     limit: number;
   };
 }
+
+export type ChatCardType = {
+  id: string;
+  name: string;
+  type: ChatType;
+  icon: string | null;
+};
