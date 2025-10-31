@@ -12,19 +12,24 @@ import {
   UserProfile,
   SidebarHeader as SidebarTop,
   ActiveChats,
+  ChatWindow,
 } from "@/components";
 import axiosInstance from "@/api";
 import { useCallback, useEffect, useState } from "react";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
-import type { ChatCardType } from "@/types";
+import type { Chat, ChatCardType } from "@/types";
 
 // sidebar to show all the chats user in
 // search bar to search for user or
 
+// FIX: better response from get chat by id like common chat details, only few participant details like their name, icon, username, email, id
 export default function Chat() {
   const { loading, user } = useAuth();
   const [allChats, setAllChats] = useState<ChatCardType[]>([]);
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fetchAllChats = useCallback(async () => {
     try {
@@ -38,9 +43,36 @@ export default function Chat() {
     }
   }, [user]);
 
+  const fetchSelectedChat = useCallback(async () => {
+    if (!selectedChatId) {
+      return;
+    }
+    // chat details like, chat name, members, icon, messages etc
+    setIsLoading(true);
+    try {
+      const response = await axiosInstance.get(`/chats/${selectedChatId}`);
+      setSelectedChat(response.data.chat);
+    } catch (error) {
+      const err = error as AxiosError;
+      const errMsg =
+        (err.response?.data as any).message || "Something went wrong";
+      toast.error(errMsg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [selectedChatId]);
+
   useEffect(() => {
     fetchAllChats();
   }, [user, fetchAllChats]);
+
+  useEffect(() => {
+    fetchSelectedChat();
+  }, [selectedChatId, fetchSelectedChat]);
+
+  const getCurrentChatId = (chatId: string) => {
+    setSelectedChatId(chatId);
+  };
 
   if (loading) {
     return (
@@ -57,7 +89,7 @@ export default function Chat() {
           <SidebarTop />
         </SidebarHeader>
         <SidebarContent>
-          <ActiveChats chats={allChats} />
+          <ActiveChats chats={allChats} getCurrentChatId={getCurrentChatId} />
         </SidebarContent>
         <SidebarFooter>
           <UserProfile
@@ -70,7 +102,19 @@ export default function Chat() {
         </SidebarFooter>
       </Sidebar>
       <SidebarTrigger className="hidden" />
-      <div>{/** Sidebar content */}</div>
+      <div>
+        {!selectedChatId ? (
+          <div>
+            <h1>No chat selected</h1>
+          </div>
+        ) : isLoading ? (
+          <span>
+            <Loader2 className="w-8 h-8 animate-spin" />
+          </span>
+        ) : (
+          <ChatWindow chat={selectedChat} />
+        )}
+      </div>
     </SidebarProvider>
   );
 }

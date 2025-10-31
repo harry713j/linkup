@@ -4,11 +4,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 type ActiveChatsProps = {
   chats: ChatCardType[];
+  getCurrentChatId: (chatId: string) => void;
 };
 
-// show all the chats of the user
-// this will pass the which room selected to its parent component
-export function ActiveChats({ chats }: ActiveChatsProps) {
+export function ActiveChats({ chats, getCurrentChatId }: ActiveChatsProps) {
   if (chats.length === 0) {
     return <div>No Chats</div>;
   }
@@ -16,7 +15,11 @@ export function ActiveChats({ chats }: ActiveChatsProps) {
   return (
     <>
       {chats.map((chat) => (
-        <Card key={chat.id} className="flex items-start">
+        <Card
+          key={chat.id}
+          className="flex items-start"
+          onClick={() => getCurrentChatId(chat.id)}
+        >
           <CardHeader>
             <Avatar>
               {chat?.icon && <AvatarImage src={chat?.icon} alt={chat.name} />}

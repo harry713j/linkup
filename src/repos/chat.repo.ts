@@ -180,7 +180,11 @@ async function findOne(chatId: string) {
     const chat = await db.query.ChatTable.findFirst({
       where: eq(ChatTable.id, chatId),
       with: {
-        creator: true,
+        creator: {
+          columns: {
+            passwordHash: false,
+          },
+        },
         participants: true,
       },
     });

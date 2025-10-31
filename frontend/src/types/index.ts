@@ -42,3 +42,28 @@ export type ChatCardType = {
   type: ChatType;
   icon: string | null;
 };
+
+export interface Chat {
+  id: string;
+  name: string;
+  adminID: string | null;
+  groupIcon: string | null;
+  type: ChatType;
+  createdAt: Date;
+  updatedAt: Date;
+  creator: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    username: string;
+    email: string;
+  } | null;
+  participants:
+    | {
+        chatID: string;
+        participantID: string;
+        role: "admin" | "participant";
+        joinedAt: Date;
+      }[]
+    | undefined;
+}
