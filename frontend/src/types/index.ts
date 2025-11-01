@@ -43,6 +43,7 @@ export type ChatCardType = {
   icon: string | null;
 };
 
+// FIX: it
 export interface Chat {
   id: string;
   name: string;
@@ -66,4 +67,30 @@ export interface Chat {
         joinedAt: Date;
       }[]
     | undefined;
+}
+
+// FIX: this and the response from the server
+export interface Message {
+  id: number;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  chatID: string;
+  senderID: string;
+  content: string | null;
+  attachmentUrl: string | null;
+  messageType: "text" | "image" | "video" | "file" | null;
+  messageStatus: {
+    updatedAt: Date | null;
+    userID: string;
+    status: "sent" | "delivered" | "seen" | null;
+    messageID: number;
+  }[];
+  sender: {
+    id: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    username: string;
+    email: string;
+    passwordHash: string;
+  }[];
 }

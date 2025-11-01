@@ -112,7 +112,7 @@ async function fetchAll(chatId: string, page: number, limit: number) {
         total: messagesCount,
         page: page,
         limit: limit,
-        totalPages: totalPages,
+        pages: totalPages,
       },
     };
   } catch (error) {
