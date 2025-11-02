@@ -49,5 +49,15 @@ export function ChatWindow({ chat }: ChatWindowProps) {
     );
   }
 
-  return <div>Chat Window</div>;
+  return (
+    <div>
+      <div>
+        <h2>{chat.name}</h2>
+      </div>
+      <div>
+        {messages &&
+          messages.map((message) => <p key={message.id}>{message.content}</p>)}
+      </div>
+    </div>
+  );
 }
