@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./global.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/context/AuthContext";
+import { SocketProvider } from "@/context/SocketContext";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { Home, Signup, Login, Chat } from "@/pages/index";
 
@@ -28,8 +29,10 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
-      <Toaster position="bottom-center" />
+      <SocketProvider>
+        <RouterProvider router={router} />
+        <Toaster position="bottom-center" />
+      </SocketProvider>
     </AuthProvider>
   </StrictMode>
 );

@@ -13,6 +13,14 @@ export function setAccessToken(token: string | null) {
   console.log("Access Token: ", accessToken);
 }
 
+export function getAccessToken(): string {
+  if (!accessToken) {
+    return "";
+  }
+
+  return accessToken;
+}
+
 axiosInstance.interceptors.request.use(
   function (config) {
     if (accessToken) {
