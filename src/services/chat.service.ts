@@ -12,7 +12,7 @@ import {
   UnauthorizedError,
 } from "@/errors/ApiError.js";
 import { db } from "@/database/index.js";
-import { Participant } from "@/types/chat";
+import { ChatParticipant, Participant } from "@/types/chat.js";
 import logger from "@/logging/logger.js";
 
 async function createChat(userId: string, data: CreateChatInput) {
@@ -131,10 +131,39 @@ async function fetchChat(userId: string, chatId: string) {
     throw new UnauthorizedError();
   }
 
+  const chat = await chatRepo.findOne(chatId);
+
+  if (!chat) {
+    logger.warn(
+      `Chat retrieval from DB failed: No user found with user id=${userId} and chat id=${chatId}`
+    );
+
+    throw new NotFoundError("Chat not exists");
+  }
+
+  const transformedChatParticipants: ChatParticipant[] = chat.participants.map(
+    (p) => ({
+      role: p.role ?? null,
+      joinedAt: p.joinedAt ?? null,
+      username: p.user?.username ?? "",
+      email: p.user?.email ?? "",
+      id: p.user?.id ?? "",
+      displayName: p.user?.userDetail?.displayName ?? null,
+      status: p.user?.userDetail?.status ?? null,
+      profileUrl: p.user?.userDetail?.profileUrl ?? null,
+    })
+  );
+
+  const transformedChat = {
+    ...chat,
+    participants: transformedChatParticipants,
+  };
+
   logger.info(
     `Retrieval of chat with chat id=${chatId} successful for user id=${userId}`
   );
-  return await chatRepo.findOne(chatId);
+
+  return transformedChat;
 }
 
 async function removeChat(userId: string, chatId: string) {

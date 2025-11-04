@@ -43,30 +43,28 @@ export type ChatCardType = {
   icon: string | null;
 };
 
-// FIX: it
+export type ChatWindowProps = {
+  chat: Chat | null;
+};
+
 export interface Chat {
-  id: string;
-  name: string;
-  adminID: string | null;
-  groupIcon: string | null;
-  type: ChatType;
-  createdAt: Date;
-  updatedAt: Date;
-  creator: {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
+  participants: {
+    role: "admin" | "participant" | null;
+    joinedAt: Date | null;
     username: string;
     email: string;
-  } | null;
-  participants:
-    | {
-        chatID: string;
-        participantID: string;
-        role: "admin" | "participant";
-        joinedAt: Date;
-      }[]
-    | undefined;
+    id: string;
+    displayName: string | null | undefined;
+    status: boolean | null;
+    profileUrl: string | null;
+  }[];
+  type: "direct" | "group" | null;
+  name: string;
+  groupIcon: string | null;
+  id: string;
+  adminID: string | null;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 // FIX: this and the response from the server

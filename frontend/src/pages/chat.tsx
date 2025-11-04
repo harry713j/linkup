@@ -12,7 +12,8 @@ import {
   UserProfile,
   SidebarHeader as SidebarTop,
   ActiveChats,
-  ChatWindow,
+  DirectChatWindow,
+  GroupChatWindow,
 } from "@/components";
 import axiosInstance from "@/api";
 import { useCallback, useEffect, useState } from "react";
@@ -23,7 +24,6 @@ import type { Chat, ChatCardType } from "@/types";
 // sidebar to show all the chats user in
 // search bar to search for user or
 
-// FIX: better response from get chat by id like common chat details, only few participant details like their name, icon, username, email, id
 export default function Chat() {
   const { loading, user } = useAuth();
   const [allChats, setAllChats] = useState<ChatCardType[]>([]);
@@ -103,7 +103,7 @@ export default function Chat() {
       </Sidebar>
       <SidebarTrigger className="hidden" />
       <div>
-        {!selectedChatId ? (
+        {!selectedChat ? (
           <div>
             <h1>No chat selected</h1>
           </div>
@@ -111,8 +111,10 @@ export default function Chat() {
           <span>
             <Loader2 className="w-8 h-8 animate-spin" />
           </span>
+        ) : selectedChat.type === "direct" ? (
+          <DirectChatWindow chat={selectedChat} />
         ) : (
-          <ChatWindow chat={selectedChat} />
+          <GroupChatWindow chat={selectedChat} />
         )}
       </div>
     </SidebarProvider>

@@ -1,17 +1,17 @@
 import axiosInstance from "@/api";
-import { type PaginatedResponse, type Chat, type Message } from "@/types";
+import {
+  type PaginatedResponse,
+  type Message,
+  type ChatWindowProps,
+} from "@/types";
 import type { AxiosError } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-type ChatWindowProps = {
-  chat: Chat | null;
-};
-
 // when this component loads, fetch the messages, all the events through sockets like typing etc,
 // when click on seeing group about section there the group members should be shown(participant id, name, username, icon)
 
-export function ChatWindow({ chat }: ChatWindowProps) {
+export function GroupChatWindow({ chat }: ChatWindowProps) {
   const [data, setData] = useState<PaginatedResponse<Message> | null>(null);
   const [messages, setMessages] = useState<Message[] | undefined>([]);
   const [page, setPage] = useState(1);
