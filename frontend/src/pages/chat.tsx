@@ -47,7 +47,6 @@ export default function Chat() {
     if (!selectedChatId) {
       return;
     }
-    // chat details like, chat name, members, icon, messages etc
     setIsLoading(true);
     try {
       const response = await axiosInstance.get(`/chats/${selectedChatId}`);

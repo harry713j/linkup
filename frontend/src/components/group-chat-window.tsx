@@ -13,7 +13,7 @@ import { toast } from "sonner";
 
 export function GroupChatWindow({ chat }: ChatWindowProps) {
   const [data, setData] = useState<PaginatedResponse<Message> | null>(null);
-  const [messages, setMessages] = useState<Message[] | undefined>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -24,9 +24,13 @@ export function GroupChatWindow({ chat }: ChatWindowProps) {
     }
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get(`/chats/${chat.id}/messages`);
+      const response = await axiosInstance.get<{
+        message: string;
+        data: PaginatedResponse<Message>;
+      }>(`/chats/${chat.id}/messages`);
+
       setData(response.data.data);
-      setMessages(data?.data);
+      setMessages(data?.data ?? []);
     } catch (error) {
       const err = error as AxiosError;
       const errMsg =
