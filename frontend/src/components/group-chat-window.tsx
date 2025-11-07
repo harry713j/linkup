@@ -5,11 +5,13 @@ import {
   type ChatWindowProps,
 } from "@/types";
 import type { AxiosError } from "axios";
+import { Loader2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 // when this component loads, fetch the messages, all the events through sockets like typing etc,
 // when click on seeing group about section there the group members should be shown(participant id, name, username, icon)
+// on scroll in chat window container it should fetch the messages from server by changing the pages and limit
 
 export function GroupChatWindow({ chat }: ChatWindowProps) {
   const [data, setData] = useState<PaginatedResponse<Message> | null>(null);
@@ -31,6 +33,24 @@ export function GroupChatWindow({ chat }: ChatWindowProps) {
 
       setData(response.data.data);
       setMessages(data?.data ?? []);
+
+      // set the page
+      setPage((prev) => {
+        if (prev + 1 <= response.data.data.meta.pages) {
+          return prev + 1;
+        }
+
+        return prev;
+      });
+
+      // set the limit
+      setLimit((prev) => {
+        if (page === response.data.data.meta.pages) {
+          return response.data.data.meta.total - (page - 1) * limit;
+        }
+
+        return prev;
+      });
     } catch (error) {
       const err = error as AxiosError;
       const errMsg =
@@ -57,10 +77,19 @@ export function GroupChatWindow({ chat }: ChatWindowProps) {
     <div>
       <div>
         <h2>{chat.name}</h2>
+        <p>{chat.participants.map((p) => p.displayName).join(",")}</p>
       </div>
       <div>
-        {messages &&
-          messages.map((message) => <p key={message.id}>{message.content}</p>)}
+        {isLoading ? (
+          <Loader2 className="w-8 h-8 animate-spin" />
+        ) : (
+          messages.map((message) => (
+            <div key={message.id}>
+              <p>{message.sender.displayName}</p>
+              <span>{message.content}</span>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
