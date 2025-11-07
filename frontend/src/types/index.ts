@@ -67,8 +67,15 @@ export interface Chat {
   updatedAt: Date | null;
 }
 
-// FIX: this and the response from the server
 export interface Message {
+  sender: {
+    id: string;
+    username: string;
+    email: string;
+    displayName: string | null | undefined;
+    status: boolean | null | undefined;
+    profileUrl: string | null | undefined;
+  };
   id: number;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -82,13 +89,5 @@ export interface Message {
     userID: string;
     status: "sent" | "delivered" | "seen" | null;
     messageID: number;
-  }[];
-  sender: {
-    id: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-    username: string;
-    email: string;
-    passwordHash: string;
   }[];
 }

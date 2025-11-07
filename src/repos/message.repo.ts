@@ -88,7 +88,18 @@ async function fetchAll(chatId: string, page: number, limit: number) {
     const offset = (page - 1) * limit;
     const messages = await db.query.MessageTable.findMany({
       with: {
-        sender: true,
+        sender: {
+          columns: {
+            id: true, username: true, email: true
+          },
+          with: {
+            userDetail: {
+              columns: {
+                displayName: true, profileUrl: true, status: true
+              }
+            }
+          }
+        },
         messageStatus: true,
       },
       where: eq(MessageTable.chatID, chatId),
@@ -96,6 +107,20 @@ async function fetchAll(chatId: string, page: number, limit: number) {
       offset: offset,
       limit: limit,
     });
+
+    const flatMessages = messages.map(m => (
+      {
+        ...m,
+        sender: {
+          id: m.sender.id,
+          username: m.sender.username,
+          email: m.sender.email,
+          displayName: m.sender.userDetail?.displayName,
+          status: m.sender.userDetail?.status,
+          profileUrl: m.sender.userDetail?.profileUrl
+        }
+      }
+    ))
 
     const result = await db.execute(
       sql`SELECT COUNT(*) AS count FROM ${MessageTable} WHERE ${MessageTable.chatID} = ${chatId}`
@@ -107,7 +132,7 @@ async function fetchAll(chatId: string, page: number, limit: number) {
       `Fetched all the messages of chat id=${chatId}, page=${page} and limit=${limit}`
     );
     return {
-      data: messages,
+      data: flatMessages,
       meta: {
         total: messagesCount,
         page: page,

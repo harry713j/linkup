@@ -34,6 +34,24 @@ export function DirectChatWindow({ chat }: ChatWindowProps) {
 
       setData(response.data.data);
       setMessages(data?.data ?? []);
+
+      // set the page
+      setPage((prev) => {
+        if (prev + 1 <= response.data.data.meta.pages) {
+          return prev + 1;
+        }
+
+        return prev;
+      });
+
+      // set the limit
+      setLimit((prev) => {
+        if (page === response.data.data.meta.pages) {
+          return response.data.data.meta.total - (page - 1) * limit;
+        }
+
+        return prev;
+      });
     } catch (error) {
       const err = error as AxiosError;
       const errMsg =
@@ -56,16 +74,24 @@ export function DirectChatWindow({ chat }: ChatWindowProps) {
     );
   }
 
+  const receiver = chat.participants.find((p) => p.id != user?.id);
+
   return (
     <div>
       <div>
-        <h2>{chat.participants.find((p) => p.id != user?.id)?.displayName}</h2>
+        <h2>{receiver?.displayName}</h2>
+        <p>{receiver?.username}</p>
       </div>
       <div>
         {isLoading ? (
           <Loader2 className="w-8 h-8 animate-spin" />
         ) : (
-          messages.map((message) => <p key={message.id}>{message.content}</p>)
+          messages.map((message) => (
+            <div key={message.id}>
+              <p>{message.sender.displayName}</p>
+              <span>{message.content}</span>
+            </div>
+          ))
         )}
       </div>
     </div>
