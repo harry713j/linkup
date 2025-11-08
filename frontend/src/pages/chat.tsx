@@ -20,12 +20,14 @@ import { useCallback, useEffect, useState } from "react";
 import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import type { Chat, ChatCardType } from "@/types";
+import { useSocket } from "@/context/SocketContext";
 
 // sidebar to show all the chats user in
 // search bar to search for user or
 
 export default function Chat() {
   const { loading, user } = useAuth();
+  const { socket } = useSocket();
   const [allChats, setAllChats] = useState<ChatCardType[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
@@ -60,6 +62,38 @@ export default function Chat() {
       setIsLoading(false);
     }
   }, [selectedChatId]);
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    const onSocketConnect = () => {
+      console.log("Connected on socket id ", socket.id);
+
+      // join to all the chats
+      onJoinChats();
+    };
+
+    const onSocketDisconnect = () => {
+      console.log("Disconnect from socket");
+    };
+
+    const onJoinChats = () => {
+      const chatIds = allChats.map((c) => c.id);
+
+      socket.emit("join_chats", { chatIds });
+    };
+
+    socket.on("connect", onSocketConnect);
+    socket.on("disconnect", onSocketDisconnect);
+
+    return () => {
+      socket.off("connect", onSocketConnect);
+      socket.off("disconnect", onSocketDisconnect);
+      socket.disconnect();
+    };
+  }, [socket, allChats]);
 
   useEffect(() => {
     fetchAllChats();
